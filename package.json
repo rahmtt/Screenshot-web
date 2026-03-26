@@ -1,0 +1,15 @@
+{
+  "name": "rahmat-capture-pro",
+  "version": "1.0.0",
+  "description": "High-Definition Web Screenshot Tool with Smart Delay by 𝘾𝙤𝙙𝙚⚙️𝘼𝙄",
+  "main": "api/screenshot.js",
+  "scripts": {
+    "start": "node api/screenshot.js"
+  },
+  "dependencies": {
+    "@sparticuz/chromium": "^119.0.0",
+    "puppeteer-core": "^21.0.0"
+  },
+  "author": "Rahmat Dev",
+  "license": "ISC"
+} 
