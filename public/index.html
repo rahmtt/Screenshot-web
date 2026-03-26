@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rahmat Web Capture HD</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Load icon font buat sosmed -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📸 Rahmat Web Capture</h1>
+            <p>High-Definition Screenshot Tool with Smart Delay</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <input type="url" id="urlInput" placeholder="Masukkan URL website (contoh: https://google.com)" required>
+                <button id="captureBtn">Capture HD</button>
+            </div>
+            
+            <div class="loading" id="loadingState" style="display: none;">
+                <div class="spinner"></div>
+                <p>Tunggu bentar bro, lagi nunggu webnya kelar loading...</p>
+            </div>
+
+            <div class="preview-container" id="previewContainer" style="display: none;">
+                <div class="browser-mockup">
+                    <div class="browser-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <div class="address-bar" id="addressBarText">rahmat-capture.png</div>
+                    </div>
+                    <img id="resultImage" src="" alt="Screenshot Result">
+                </div>
+                <button id="downloadBtn" class="download-btn"><i class="fas fa-download"></i> Download Hasil</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>Powered by <strong>✧･ﾟ: [𝙍]𝙝𝙢𝙏 | 𝘾𝙤𝙙𝙚⚙️𝘼𝙄 𝙡 :･ﾟ✧</strong></p>
+            <div class="social-links">
+                <a href="https://whatsapp.com/channel/0029VbBjyjlJ93wa6hwSWa0p" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.instagram.com/rahmt_nhw?igsh=MWQwcnB3bTA2ZnVidg==" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@r_hmtofc?_r=1&_t=ZS-94KRfWQjeUu" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                <a href="https://t.me/rAi_engine" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
+            </div>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+                  </html> 
