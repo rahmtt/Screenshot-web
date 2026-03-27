@@ -3,249 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rahmat Web Capture</title>
+    <title>Web Capture Engine</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800&family=Rajdhani:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* ================= CSS SECTION ================= */
+        /* ================= TEMA NEON GLASSMORPHISM ================= */
         :root {
-            --bg-color: #0d1117;
-            --card-bg: #161b22;
-            --border-color: #30363d;
-            --primary: #58a6ff;
-            --primary-hover: #1f6feb;
-            --text-main: #c9d1d9;
-            --text-muted: #8b949e;
-            --success: #3fb950;
+            --bg-dark: #050505;
+            --neon-blue: #00f0ff;
+            --neon-purple: #8a2be2;
+            --glass-bg: rgba(15, 15, 20, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e0e0e0;
+            --text-muted: #8892b0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg-dark);
+            /* Efek Grid Cyberpunk di Background */
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
             color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.5;
-            padding: 20px;
+            font-family: 'Rajdhani', sans-serif;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            padding: 30px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Cahaya di belakang card */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 300px;
+            background: var(--neon-blue);
+            filter: blur(150px);
+            opacity: 0.2;
+            z-index: -1;
         }
 
         .container {
             width: 100%;
-            max-width: 600px;
-            margin-top: 20px;
+            max-width: 650px;
+            z-index: 1;
         }
 
         .header-brand {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease;
         }
 
         .header-brand i {
-            font-size: 40px;
-            color: var(--primary);
+            font-size: 50px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.4));
         }
 
         .header-brand h1 {
-            font-size: 24px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
             font-weight: 800;
+            letter-spacing: 2px;
             color: #fff;
-            margin-top: 10px;
+            margin-top: 15px;
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
         }
 
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        /* Glassmorphism Card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 25px; }
 
         label {
             display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 8px;
             font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--neon-blue);
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
+        .input-wrapper { position: relative; }
         .input-wrapper i {
             position: absolute;
             left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
             color: var(--text-muted);
+            font-size: 18px;
+            transition: 0.3s;
         }
 
         input[type="url"], input[type="number"], select {
             width: 100%;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 12px 15px 12px 40px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-family: 'Inter', sans-serif;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 15px 15px 15px 45px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'JetBrains Mono', monospace;
             outline: none;
-            transition: 0.2s;
+            transition: all 0.3s ease;
         }
 
-        input[type="number"], select {
-            padding-left: 15px; /* Hilangkan space icon utk select/number */
-        }
+        input[type="number"], select { padding-left: 15px; }
 
         input:focus, select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+            background: rgba(0, 240, 255, 0.05);
         }
+        
+        .input-wrapper:focus-within i { color: var(--neon-blue); }
 
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 20px;
         }
 
+        /* Custom Checkbox Cyber */
         .checkbox-wrapper {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-top: 30px;
+            gap: 12px;
+            margin-top: 35px;
             cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 16px;
         }
 
         .checkbox-wrapper input {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--primary);
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--neon-blue);
+            border-radius: 5px;
+            background: transparent;
+            position: relative;
             cursor: pointer;
+            transition: 0.2s;
         }
 
+        .checkbox-wrapper input:checked {
+            background: var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .checkbox-wrapper input:checked::after {
+            content: '✔';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #000;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Tombol Utama */
         .btn {
             width: 100%;
-            background: var(--primary);
+            background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
             color: #fff;
             border: none;
-            padding: 14px;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 10px;
-            transition: 0.2s;
-            margin-top: 10px;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 5px 20px rgba(0, 114, 255, 0.4);
         }
 
-        .btn:hover { background: var(--primary-hover); }
-        .btn:disabled { background: var(--border-color); color: var(--text-muted); cursor: not-allowed; }
-
-        .btn-success {
-            background: var(--success);
-            margin-top: 15px;
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 240, 255, 0.6);
         }
-        .btn-success:hover { background: #2ea043; }
+        
+        .btn:disabled {
+            background: #333;
+            color: #888;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
 
+        /* Animasi Loader */
         .loader {
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
+            width: 22px;
+            height: 22px;
+            border: 3px solid rgba(255,255,255,0.2);
             border-top-color: #fff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             display: none;
         }
-
         @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Result Area */
+        /* Area Hasil Screenshot */
         #result-area {
             display: none;
-            margin-top: 30px;
-            border-top: 1px dashed var(--border-color);
-            padding-top: 30px;
+            margin-top: 40px;
+            animation: fadeInDown 0.5s ease;
         }
 
         .browser-mockup {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border: 1px solid var(--neon-blue);
+            border-radius: 12px;
             overflow: hidden;
-            background: var(--bg-color);
+            background: #000;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
         }
 
         .browser-header {
-            background: var(--card-bg);
-            padding: 10px;
+            background: rgba(0, 240, 255, 0.1);
+            padding: 12px;
             display: flex;
-            gap: 6px;
-            border-bottom: 1px solid var(--border-color);
+            gap: 8px;
+            border-bottom: 1px solid var(--glass-border);
         }
 
-        .dot { width: 10px; height: 10px; border-radius: 50%; }
-        .dot.r { background: #ff5f56; }
-        .dot.y { background: #ffbd2e; }
-        .dot.g { background: #27c93f; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot.r { background: #ff5f56; box-shadow: 0 0 5px #ff5f56; }
+        .dot.y { background: #ffbd2e; box-shadow: 0 0 5px #ffbd2e; }
+        .dot.g { background: #27c93f; box-shadow: 0 0 5px #27c93f; }
 
-        .img-container {
-            width: 100%;
-            padding: 10px;
-            text-align: center;
+        .img-container { padding: 15px; text-align: center; }
+        .img-container img { max-width: 100%; border-radius: 6px; }
+
+        .btn-success {
+            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+            box-shadow: 0 5px 20px rgba(56, 239, 125, 0.4);
+            margin-top: 20px;
         }
+        .btn-success:hover { box-shadow: 0 8px 25px rgba(56, 239, 125, 0.6); }
 
-        .img-container img {
-            max-width: 100%;
-            border-radius: 4px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-        }
-
-        /* Footer */
+        /* ================= FOOTER REQUEST KHUSUS ================= */
         footer {
-            margin-top: 40px;
+            margin-top: 50px;
             text-align: center;
             width: 100%;
+            padding-top: 20px;
+            border-top: 1px solid var(--glass-border);
         }
 
-        footer p {
+        /* 1. Powered By */
+        .powered-text {
+            font-family: 'JetBrains Mono', monospace;
             font-size: 13px;
             color: var(--text-muted);
-            margin-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .powered-text strong {
+            color: var(--neon-blue);
+            font-size: 14px;
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
         }
 
-        footer strong { color: var(--text-main); }
+        /* 2. Tombol Join Saluran (Beda Sendiri) */
+        .join-channel-box {
+            margin-bottom: 25px;
+        }
+        .btn-join-saluran {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 10px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+        .btn-join-saluran:hover {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+            transform: scale(1.05);
+        }
 
+        /* 3. Social Links biasa */
         .social-links {
             display: flex;
             justify-content: center;
             gap: 20px;
         }
-
         .social-links a {
             color: var(--text-muted);
             font-size: 24px;
             text-decoration: none;
-            transition: 0.2s;
+            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.05);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            border: 1px solid transparent;
+        }
+        .social-links a:hover { 
+            color: #fff; 
+            border-color: var(--glass-border);
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px); 
         }
 
-        .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
-
-        /* Responsive */
         @media (max-width: 480px) {
             .grid-2 { grid-template-columns: 1fr; gap: 20px; }
-            .checkbox-wrapper { margin-top: 0; }
+            .checkbox-wrapper { margin-top: 10px; }
+            .glass-card { padding: 25px 20px; }
         }
     </style>
 </head>
@@ -253,38 +359,38 @@
 
     <div class="container">
         <div class="header-brand">
-            <i class="ri-code-s-slash-line"></i>
-            <h1>Rahmat Web Capture</h1>
+            <i class="ri-radar-line"></i>
+            <h1>WEB CAPTURE ENGINE</h1>
         </div>
 
-        <div class="card">
+        <div class="glass-card">
             <form id="ss-form">
                 <div class="form-group">
                     <label>URL TARGET</label>
                     <div class="input-wrapper">
-                        <i class="ri-link"></i>
-                        <input type="url" id="url" placeholder="https://google.com" required>
+                        <i class="ri-links-line"></i>
+                        <input type="url" id="url" placeholder="https://domain-target.com" required>
                     </div>
                 </div>
 
                 <div class="grid-2">
                     <div class="form-group">
-                        <label>LEBAR (PX)</label>
+                        <label>LEBAR VIEWPORT (PX)</label>
                         <input type="number" id="width" value="1280" required>
                     </div>
                     <div class="form-group">
-                        <label>TINGGI (PX)</label>
+                        <label>TINGGI VIEWPORT (PX)</label>
                         <input type="number" id="height" value="720" required>
                     </div>
                 </div>
 
                 <div class="grid-2">
                     <div class="form-group">
-                        <label>KUALITAS (SCALE)</label>
+                        <label>RENDER SCALE</label>
                         <select id="scale">
                             <option value="1">1x (Standar)</option>
-                            <option value="2">2x (HD / Retina)</option>
-                            <option value="3">3x (Ultra HD)</option>
+                            <option value="2">2x (Retina HD)</option>
+                            <option value="3">3x (Ultra 4K)</option>
                         </select>
                     </div>
                     <label class="checkbox-wrapper">
@@ -294,8 +400,8 @@
                 </div>
 
                 <button type="submit" id="submit-btn" class="btn">
-                    <span id="btn-text">AMBIL SCREENSHOT</span>
-                    <i class="ri-camera-lens-fill" id="btn-icon"></i>
+                    <span id="btn-text">INITIALIZE CAPTURE</span>
+                    <i class="ri-focus-3-line" id="btn-icon"></i>
                     <div class="loader" id="loader"></div>
                 </button>
             </form>
@@ -308,20 +414,32 @@
                         <span class="dot g"></span>
                     </div>
                     <div class="img-container">
-                        <img id="result-img" src="" alt="Hasil Screenshot">
+                        <img id="result-img" src="" alt="Hasil Render">
                     </div>
                 </div>
                 
                 <button id="download-btn" class="btn btn-success">
-                    <i class="ri-download-cloud-fill"></i> SIMPAN GAMBAR
+                    <i class="ri-download-cloud-fill"></i> SIMPAN HASIL RENDER
                 </button>
             </div>
         </div>
 
         <footer>
-            <p>Powered by <strong>✧･ﾟ: [𝙍]𝙝𝙢𝙏 | 𝘾𝙤𝙙𝙚⚙️𝘼𝙄 𝙡 :･ﾟ✧</strong></p>
+            <!-- 1. Teks Powered By -->
+            <div class="powered-text">
+                Powered by<br>
+                <strong>✧･ﾟ: [𝙍]𝙝𝙢𝙏 | 𝘾𝙤𝙙𝙚⚙️𝘼𝙄 𝙡 :･ﾟ✧</strong>
+            </div>
+
+            <!-- 2. Tombol Join Saluran (Spesial & Terpisah) -->
+            <div class="join-channel-box">
+                <a href="https://whatsapp.com/channel/0029VbBjyjlJ93wa6hwSWa0p" target="_blank" class="btn-join-saluran">
+                    <i class="ri-whatsapp-fill"></i> JOIN SALURAN WHATSAPP
+                </a>
+            </div>
+
+            <!-- 3. Icon Sosmed Lainnya -->
             <div class="social-links">
-                <a href="https://whatsapp.com/channel/0029VbBjyjlJ93wa6hwSWa0p" target="_blank"><i class="ri-whatsapp-fill"></i></a>
                 <a href="https://www.instagram.com/rahmt_nhw?igsh=MWQwcnB3bTA2ZnVidg==" target="_blank"><i class="ri-instagram-line"></i></a>
                 <a href="https://www.tiktok.com/@r_hmtofc?_r=1&_t=ZS-94KRfWQjeUu" target="_blank"><i class="ri-tiktok-fill"></i></a>
                 <a href="https://t.me/rAi_engine" target="_blank"><i class="ri-telegram-fill"></i></a>
@@ -330,7 +448,7 @@
     </div>
 
     <script>
-        // ================= JAVASCRIPT SECTION =================
+        // Logika aslinya nggak diganggu gugat bro
         const API_URL = '/api/screenshot';
 
         const form = document.getElementById('ss-form');
@@ -345,7 +463,6 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // UI State: Loading
             submitBtn.disabled = true;
             btnText.textContent = 'MEMPROSES...';
             btnIcon.style.display = 'none';
@@ -361,7 +478,6 @@
             };
 
             try {
-                // Request ke Backend asli lu (Axios di server)
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -382,9 +498,8 @@
                 console.error('Error:', error);
                 alert('Terjadi kesalahan koneksi.');
             } finally {
-                // Reset UI State
                 submitBtn.disabled = false;
-                btnText.textContent = 'AMBIL SCREENSHOT';
+                btnText.textContent = 'INITIALIZE CAPTURE';
                 btnIcon.style.display = 'inline-block';
                 loader.style.display = 'none';
             }
@@ -394,7 +509,6 @@
             e.preventDefault();
             const imageUrl = resultImg.src;
             
-            // Ganti text tombol saat download
             const originalHTML = downloadBtn.innerHTML;
             downloadBtn.innerHTML = '<div class="loader" style="display:inline-block; border-color: #fff; border-top-color: transparent;"></div> MENDOWNLOAD...';
             
@@ -405,7 +519,7 @@
                 
                 const a = document.createElement('a');
                 a.href = tempUrl;
-                a.download = `rahmat-capture-${new Date().getTime()}.png`;
+                a.download = `capture-engine-${new Date().getTime()}.png`;
                 
                 document.body.appendChild(a);
                 a.click();
@@ -413,11 +527,11 @@
                 window.URL.revokeObjectURL(tempUrl);
             } catch (err) {
                 console.error("Gagal auto-download", err);
-                window.open(imageUrl, '_blank'); // Fallback tab baru
+                window.open(imageUrl, '_blank'); 
             } finally {
                 downloadBtn.innerHTML = originalHTML;
             }
         });
     </script>
 </body>
-  </html> 
+    </html>
