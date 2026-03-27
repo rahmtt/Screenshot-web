@@ -1,43 +1,60 @@
-document.getElementById('captureBtn').addEventListener('click', async () => {
-    const url = document.getElementById('urlInput').value;
-    const loadingState = document.getElementById('loadingState');
-    const previewContainer = document.getElementById('previewContainer');
-    const resultImage = document.getElementById('resultImage');
-    
-    if (!url) return alert('Bro, masukin URL nya dulu ya!');
+const axios = require('axios');
 
-    // Tampilkan loading, sembunyikan preview
-    loadingState.style.display = 'block';
-    previewContainer.style.display = 'none';
+// Handler utama untuk Vercel Serverless Function
+module.exports = async (req, res) => {
+    // Setup CORS agar bisa diakses dari frontend
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    );
+
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
+    }
+
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method Not Allowed. Use POST.' });
+    }
+
+    const { url, width = 1280, height = 720, full_page = false, device_scale = 1 } = req.body;
 
     try {
-        // Nembak ke API backend lu
-        const response = await fetch(`/api/screenshot?url=${encodeURIComponent(url)}`);
-        
-        if (!response.ok) throw new Error('Gagal ngambil screenshot');
-        
-        const blob = await response.blob();
-        const imageUrl = URL.createObjectURL(blob);
-        
-        // Tampilkan hasil
-        resultImage.src = imageUrl;
-        loadingState.style.display = 'none';
-        previewContainer.style.display = 'block';
+        if (!url || !url.startsWith('http')) {
+            throw new Error('URL tidak valid. Pastikan menggunakan https://');
+        }
 
-        // Setup tombol download
-        const downloadBtn = document.getElementById('downloadBtn');
-        downloadBtn.onclick = () => {
-            const a = document.createElement('a');
-            a.href = imageUrl;
-            // Nama file udah diganti custom
-            a.download = `rahmat-capture-${Date.now()}.png`; 
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        };
+        // Logic asli Anda
+        const { data } = await axios.post('https://gcp.imagy.app/screenshot/createscreenshot', {
+            url: url,
+            browserWidth: parseInt(width),
+            browserHeight: parseInt(height),
+            fullPage: full_page === true || full_page === 'true', // Handle string/boolean
+            deviceScaleFactor: parseInt(device_scale),
+            format: 'png'
+        }, {
+            headers: {
+                'content-type': 'application/json',
+                referer: 'https://imagy.app/full-page-screenshot-taker/',
+                'user-agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36'
+            }
+        });
+
+        if (!data.fileUrl) throw new Error('Gagal mendapatkan gambar dari provider.');
+
+        return res.status(200).json({ 
+            success: true, 
+            image_url: data.fileUrl,
+            creator: "✧･ﾟ: [𝙍]𝙝𝙢𝙏 | 𝘾𝙤𝙙𝙚⚙️𝘼𝙄 𝙡 :･ﾟ✧"
+        });
 
     } catch (error) {
-        alert('Waduh error bro: ' + error.message);
-        loadingState.style.display = 'none';
+        return res.status(500).json({ 
+            success: false, 
+            message: error.message 
+        });
     }
-}); 
+};
