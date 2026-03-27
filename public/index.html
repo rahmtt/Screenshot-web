@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rahmat Web Capture</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ================= CSS SECTION ================= */
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --primary: #58a6ff;
+            --primary-hover: #1f6feb;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --success: #3fb950;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        .header-brand {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header-brand i {
+            font-size: 40px;
+            color: var(--primary);
+        }
+
+        .header-brand h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            margin-top: 10px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            color: var(--text-muted);
+        }
+
+        input[type="url"], input[type="number"], select {
+            width: 100%;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 15px 12px 40px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input[type="number"], select {
+            padding-left: 15px; /* Hilangkan space icon utk select/number */
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 30px;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .btn {
+            width: 100%;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn:hover { background: var(--primary-hover); }
+        .btn:disabled { background: var(--border-color); color: var(--text-muted); cursor: not-allowed; }
+
+        .btn-success {
+            background: var(--success);
+            margin-top: 15px;
+        }
+        .btn-success:hover { background: #2ea043; }
+
+        .loader {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Result Area */
+        #result-area {
+            display: none;
+            margin-top: 30px;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 30px;
+        }
+
+        .browser-mockup {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--bg-color);
+        }
+
+        .browser-header {
+            background: var(--card-bg);
+            padding: 10px;
+            display: flex;
+            gap: 6px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot.r { background: #ff5f56; }
+        .dot.y { background: #ffbd2e; }
+        .dot.g { background: #27c93f; }
+
+        .img-container {
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .img-container img {
+            max-width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            width: 100%;
+        }
+
+        footer p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        footer strong { color: var(--text-main); }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-links a {
+            color: var(--text-muted);
+            font-size: 24px;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .social-links a:hover { color: var(--primary); transform: translateY(-3px); }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .grid-2 { grid-template-columns: 1fr; gap: 20px; }
+            .checkbox-wrapper { margin-top: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-brand">
+            <i class="ri-code-s-slash-line"></i>
+            <h1>Rahmat Web Capture</h1>
+        </div>
+
+        <div class="card">
+            <form id="ss-form">
+                <div class="form-group">
+                    <label>URL TARGET</label>
+                    <div class="input-wrapper">
+                        <i class="ri-link"></i>
+                        <input type="url" id="url" placeholder="https://google.com" required>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>LEBAR (PX)</label>
+                        <input type="number" id="width" value="1280" required>
+                    </div>
+                    <div class="form-group">
+                        <label>TINGGI (PX)</label>
+                        <input type="number" id="height" value="720" required>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>KUALITAS (SCALE)</label>
+                        <select id="scale">
+                            <option value="1">1x (Standar)</option>
+                            <option value="2">2x (HD / Retina)</option>
+                            <option value="3">3x (Ultra HD)</option>
+                        </select>
+                    </div>
+                    <label class="checkbox-wrapper">
+                        <input type="checkbox" id="fullpage">
+                        <span>Capture Full Page</span>
+                    </label>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn">
+                    <span id="btn-text">AMBIL SCREENSHOT</span>
+                    <i class="ri-camera-lens-fill" id="btn-icon"></i>
+                    <div class="loader" id="loader"></div>
+                </button>
+            </form>
+
+            <div id="result-area">
+                <div class="browser-mockup">
+                    <div class="browser-header">
+                        <span class="dot r"></span>
+                        <span class="dot y"></span>
+                        <span class="dot g"></span>
+                    </div>
+                    <div class="img-container">
+                        <img id="result-img" src="" alt="Hasil Screenshot">
+                    </div>
+                </div>
+                
+                <button id="download-btn" class="btn btn-success">
+                    <i class="ri-download-cloud-fill"></i> SIMPAN GAMBAR
+                </button>
+            </div>
+        </div>
+
+        <footer>
+            <p>Powered by <strong>✧･ﾟ: [𝙍]𝙝𝙢𝙏 | 𝘾𝙤𝙙𝙚⚙️𝘼𝙄 𝙡 :･ﾟ✧</strong></p>
+            <div class="social-links">
+                <a href="https://whatsapp.com/channel/0029VbBjyjlJ93wa6hwSWa0p" target="_blank"><i class="ri-whatsapp-fill"></i></a>
+                <a href="https://www.instagram.com/rahmt_nhw?igsh=MWQwcnB3bTA2ZnVidg==" target="_blank"><i class="ri-instagram-line"></i></a>
+                <a href="https://www.tiktok.com/@r_hmtofc?_r=1&_t=ZS-94KRfWQjeUu" target="_blank"><i class="ri-tiktok-fill"></i></a>
+                <a href="https://t.me/rAi_engine" target="_blank"><i class="ri-telegram-fill"></i></a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // ================= JAVASCRIPT SECTION =================
+        const API_URL = '/api/screenshot';
+
+        const form = document.getElementById('ss-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+        const btnIcon = document.getElementById('btn-icon');
+        const loader = document.getElementById('loader');
+        const resultArea = document.getElementById('result-area');
+        const resultImg = document.getElementById('result-img');
+        const downloadBtn = document.getElementById('download-btn');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // UI State: Loading
+            submitBtn.disabled = true;
+            btnText.textContent = 'MEMPROSES...';
+            btnIcon.style.display = 'none';
+            loader.style.display = 'block';
+            resultArea.style.display = 'none';
+
+            const payload = {
+                url: document.getElementById('url').value,
+                width: parseInt(document.getElementById('width').value) || 1280,
+                height: parseInt(document.getElementById('height').value) || 720,
+                device_scale: parseInt(document.getElementById('scale').value) || 1,
+                full_page: document.getElementById('fullpage').checked
+            };
+
+            try {
+                // Request ke Backend asli lu (Axios di server)
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resultImg.src = data.image_url;
+                    resultArea.style.display = 'block';
+                    resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    alert('Gagal: ' + (data.message || 'Coba lagi.'));
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan koneksi.');
+            } finally {
+                // Reset UI State
+                submitBtn.disabled = false;
+                btnText.textContent = 'AMBIL SCREENSHOT';
+                btnIcon.style.display = 'inline-block';
+                loader.style.display = 'none';
+            }
+        });
+
+        downloadBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const imageUrl = resultImg.src;
+            
+            // Ganti text tombol saat download
+            const originalHTML = downloadBtn.innerHTML;
+            downloadBtn.innerHTML = '<div class="loader" style="display:inline-block; border-color: #fff; border-top-color: transparent;"></div> MENDOWNLOAD...';
+            
+            try {
+                const response = await fetch(imageUrl);
+                const blob = await response.blob();
+                const tempUrl = window.URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = tempUrl;
+                a.download = `rahmat-capture-${new Date().getTime()}.png`;
+                
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(tempUrl);
+            } catch (err) {
+                console.error("Gagal auto-download", err);
+                window.open(imageUrl, '_blank'); // Fallback tab baru
+            } finally {
+                downloadBtn.innerHTML = originalHTML;
+            }
+        });
+    </script>
+</body>
+  </html> 
