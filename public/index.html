@@ -3,454 +3,391 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Capture Engine</title>
+    <title>Web Capture Tool</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;800&family=Rajdhani:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* ================= TEMA NEON GLASSMORPHISM ================= */
+        /* ================= TEMA 3 WARNA (HITAM, PUTIH, KUNING) ================= */
         :root {
-            --bg-dark: #050505;
-            --neon-blue: #00f0ff;
-            --neon-purple: #8a2be2;
-            --glass-bg: rgba(15, 15, 20, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --text-main: #e0e0e0;
-            --text-muted: #8892b0;
+            --black: #000000;
+            --white: #ffffff;
+            --yellow: #ffd700;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Inter', sans-serif;
+        }
         
         body {
-            background-color: var(--bg-dark);
-            /* Efek Grid Cyberpunk di Background */
-            background-image: 
-                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
-            color: var(--text-main);
-            font-family: 'Rajdhani', sans-serif;
+            /* Background hitam dengan garis-garis diagonal putih transparan tipis */
+            background: repeating-linear-gradient(
+                45deg,
+                #000000,
+                #000000 8px,
+                #0a0a0a 8px,
+                #0a0a0a 16px
+            );
+            color: var(--white);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 30px 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Cahaya di belakang card */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 300px;
-            height: 300px;
-            background: var(--neon-blue);
-            filter: blur(150px);
-            opacity: 0.2;
-            z-index: -1;
+            padding: 30px 15px;
         }
 
         .container {
             width: 100%;
-            max-width: 650px;
-            z-index: 1;
+            max-width: 420px; /* Lebar dibikin lebih padat */
+            background: var(--black);
+            border: 1px solid var(--white);
+            padding: 25px 20px;
+            box-shadow: 6px 6px 0px rgba(255, 255, 255, 0.1);
         }
 
         .header-brand {
             text-align: center;
-            margin-bottom: 40px;
-            animation: fadeInDown 1s ease;
+            margin-bottom: 20px;
+            border-bottom: 1px dashed var(--white);
+            padding-bottom: 15px;
         }
 
         .header-brand i {
-            font-size: 50px;
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.4));
+            font-size: 28px;
+            color: var(--yellow);
         }
 
         .header-brand h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: #fff;
-            margin-top: 15px;
-            text-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 5px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        /* Glassmorphism Card */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-
-        .form-group { margin-bottom: 25px; }
+        /* Form & Input - Dikecilin ukurannya */
+        .form-group { margin-bottom: 12px; }
 
         label {
             display: block;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            color: var(--neon-blue);
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
         }
 
         .input-wrapper { position: relative; }
         .input-wrapper i {
             position: absolute;
-            left: 15px;
+            left: 10px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 18px;
-            transition: 0.3s;
+            color: var(--white);
+            font-size: 14px;
         }
 
         input[type="url"], input[type="number"], select {
             width: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--glass-border);
-            color: #fff;
-            padding: 15px 15px 15px 45px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-family: 'JetBrains Mono', monospace;
+            background: var(--black);
+            border: 1px solid var(--white);
+            color: var(--yellow);
+            padding: 8px 10px 8px 30px;
+            font-size: 12px;
+            font-weight: 600;
             outline: none;
-            transition: all 0.3s ease;
+            height: 34px; /* Tinggi di pres biar slim */
+            transition: 0.2s;
         }
 
-        input[type="number"], select { padding-left: 15px; }
+        input[type="number"], select { padding-left: 10px; }
 
         input:focus, select:focus {
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
-            background: rgba(0, 240, 255, 0.05);
+            border-color: var(--yellow);
+            box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
         }
-        
-        .input-wrapper:focus-within i { color: var(--neon-blue); }
 
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 10px;
         }
 
-        /* Custom Checkbox Cyber */
+        /* Fitur hint ukuran layar waktu diklik */
+        #res-hint {
+            display: none;
+            font-size: 11px;
+            color: var(--yellow);
+            margin-top: 5px;
+            font-weight: 600;
+            animation: fadeIn 0.3s;
+        }
+        #res-hint i { margin-right: 4px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
         .checkbox-wrapper {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-top: 35px;
+            gap: 8px;
+            margin-top: 20px;
             cursor: pointer;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 16px;
+            font-size: 11px;
+            font-weight: 600;
         }
 
         .checkbox-wrapper input {
-            appearance: none;
-            width: 22px;
-            height: 22px;
-            border: 2px solid var(--neon-blue);
-            border-radius: 5px;
-            background: transparent;
-            position: relative;
+            accent-color: var(--yellow);
+            width: 14px;
+            height: 14px;
             cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .checkbox-wrapper input:checked {
-            background: var(--neon-blue);
-            box-shadow: 0 0 10px var(--neon-blue);
-        }
-
-        .checkbox-wrapper input:checked::after {
-            content: '✔';
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            color: #000;
-            font-size: 14px;
-            font-weight: bold;
         }
 
         /* Tombol Utama */
         .btn {
             width: 100%;
-            background: linear-gradient(90deg, #00c6ff 0%, #0072ff 100%);
-            color: #fff;
-            border: none;
-            padding: 16px;
-            border-radius: 10px;
-            font-size: 18px;
+            background: var(--white);
+            color: var(--black);
+            border: 1px solid var(--white);
+            height: 38px;
+            font-size: 12px;
             font-weight: 700;
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 1px;
+            text-transform: uppercase;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            box-shadow: 0 5px 20px rgba(0, 114, 255, 0.4);
+            gap: 8px;
+            margin-top: 15px;
+            transition: 0.2s;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 240, 255, 0.6);
+        .btn:hover { 
+            background: var(--yellow); 
+            border-color: var(--yellow);
         }
         
-        .btn:disabled {
-            background: #333;
-            color: #888;
-            box-shadow: none;
-            cursor: not-allowed;
-            transform: none;
+        .btn:disabled { 
+            background: #222; 
+            border-color: #222; 
+            color: #555; 
+            cursor: not-allowed; 
         }
 
-        /* Animasi Loader */
         .loader {
-            width: 22px;
-            height: 22px;
-            border: 3px solid rgba(255,255,255,0.2);
-            border-top-color: #fff;
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--black);
+            border-top-color: transparent;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             display: none;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Area Hasil Screenshot */
         #result-area {
             display: none;
-            margin-top: 40px;
-            animation: fadeInDown 0.5s ease;
+            margin-top: 20px;
+            border-top: 1px dashed var(--white);
+            padding-top: 15px;
         }
 
-        .browser-mockup {
-            border: 1px solid var(--neon-blue);
-            border-radius: 12px;
-            overflow: hidden;
-            background: #000;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+        .img-container { 
+            border: 1px solid var(--white);
+            padding: 5px; 
+            text-align: center; 
         }
-
-        .browser-header {
-            background: rgba(0, 240, 255, 0.1);
-            padding: 12px;
-            display: flex;
-            gap: 8px;
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        .dot { width: 12px; height: 12px; border-radius: 50%; }
-        .dot.r { background: #ff5f56; box-shadow: 0 0 5px #ff5f56; }
-        .dot.y { background: #ffbd2e; box-shadow: 0 0 5px #ffbd2e; }
-        .dot.g { background: #27c93f; box-shadow: 0 0 5px #27c93f; }
-
-        .img-container { padding: 15px; text-align: center; }
-        .img-container img { max-width: 100%; border-radius: 6px; }
+        .img-container img { max-width: 100%; display: block; }
 
         .btn-success {
-            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
-            box-shadow: 0 5px 20px rgba(56, 239, 125, 0.4);
-            margin-top: 20px;
+            background: var(--yellow);
+            color: var(--black);
+            border-color: var(--yellow);
         }
-        .btn-success:hover { box-shadow: 0 8px 25px rgba(56, 239, 125, 0.6); }
 
-        /* ================= FOOTER REQUEST KHUSUS ================= */
+        /* ================= FOOTER ================= */
         footer {
-            margin-top: 50px;
+            margin-top: 25px;
             text-align: center;
             width: 100%;
-            padding-top: 20px;
-            border-top: 1px solid var(--glass-border);
+            max-width: 420px;
         }
 
-        /* 1. Powered By */
         .powered-text {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 25px;
+            font-size: 10px;
+            color: var(--white);
+            margin-bottom: 15px;
+            text-transform: uppercase;
         }
         .powered-text strong {
-            color: var(--neon-blue);
-            font-size: 14px;
-            text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+            color: var(--yellow);
+            font-size: 11px;
         }
 
-        /* 2. Tombol Join Saluran (Beda Sendiri) */
+        /* Tombol Join Saluran (Kuning - Menonjol) */
         .join-channel-box {
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
+        
         .btn-join-saluran {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(0, 240, 255, 0.1);
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 10px 25px;
-            border-radius: 30px;
+            gap: 6px;
+            background: var(--black);
+            border: 1px solid var(--yellow);
+            color: var(--yellow);
+            padding: 8px 15px;
             text-decoration: none;
-            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
             font-weight: 700;
-            font-size: 14px;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+            transition: 0.2s;
         }
+        
         .btn-join-saluran:hover {
-            background: var(--neon-blue);
-            color: #000;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
-            transform: scale(1.05);
+            background: var(--yellow);
+            color: var(--black);
         }
 
-        /* 3. Social Links biasa */
+        /* Icon Sosmed (Putih) */
         .social-links {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
         }
         .social-links a {
-            color: var(--text-muted);
-            font-size: 24px;
+            color: var(--white);
+            font-size: 18px;
             text-decoration: none;
-            transition: 0.3s;
-            background: rgba(255, 255, 255, 0.05);
-            width: 45px;
-            height: 45px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            border: 1px solid transparent;
+            transition: 0.2s;
         }
-        .social-links a:hover { 
-            color: #fff; 
-            border-color: var(--glass-border);
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-5px); 
-        }
-
-        @media (max-width: 480px) {
-            .grid-2 { grid-template-columns: 1fr; gap: 20px; }
-            .checkbox-wrapper { margin-top: 10px; }
-            .glass-card { padding: 25px 20px; }
-        }
+        .social-links a:hover { color: var(--yellow); }
     </style>
 </head>
 <body>
 
     <div class="container">
         <div class="header-brand">
-            <i class="ri-radar-line"></i>
-            <h1>WEB CAPTURE ENGINE</h1>
+            <i class="ri-camera-lens-fill"></i>
+            <h1>Web Capture</h1>
         </div>
 
-        <div class="glass-card">
-            <form id="ss-form">
+        <form id="ss-form">
+            <div class="form-group">
+                <label>URL TARGET</label>
+                <div class="input-wrapper">
+                    <i class="ri-link"></i>
+                    <input type="url" id="url" placeholder="https://domain-target.com" required>
+                </div>
+            </div>
+
+            <div class="grid-2">
                 <div class="form-group">
-                    <label>URL TARGET</label>
-                    <div class="input-wrapper">
-                        <i class="ri-links-line"></i>
-                        <input type="url" id="url" placeholder="https://domain-target.com" required>
-                    </div>
+                    <label>LEBAR (PX)</label>
+                    <input type="number" id="width" value="1280" required>
                 </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>LEBAR VIEWPORT (PX)</label>
-                        <input type="number" id="width" value="1280" required>
-                    </div>
-                    <div class="form-group">
-                        <label>TINGGI VIEWPORT (PX)</label>
-                        <input type="number" id="height" value="720" required>
-                    </div>
+                <div class="form-group">
+                    <label>TINGGI (PX)</label>
+                    <input type="number" id="height" value="720" required>
                 </div>
-
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>RENDER SCALE</label>
-                        <select id="scale">
-                            <option value="1">1x (Standar)</option>
-                            <option value="2">2x (Retina HD)</option>
-                            <option value="3">3x (Ultra 4K)</option>
-                        </select>
-                    </div>
-                    <label class="checkbox-wrapper">
-                        <input type="checkbox" id="fullpage">
-                        <span>Capture Full Page</span>
-                    </label>
-                </div>
-
-                <button type="submit" id="submit-btn" class="btn">
-                    <span id="btn-text">INITIALIZE CAPTURE</span>
-                    <i class="ri-focus-3-line" id="btn-icon"></i>
-                    <div class="loader" id="loader"></div>
-                </button>
-            </form>
-
-            <div id="result-area">
-                <div class="browser-mockup">
-                    <div class="browser-header">
-                        <span class="dot r"></span>
-                        <span class="dot y"></span>
-                        <span class="dot g"></span>
-                    </div>
-                    <div class="img-container">
-                        <img id="result-img" src="" alt="Hasil Render">
-                    </div>
-                </div>
-                
-                <button id="download-btn" class="btn btn-success">
-                    <i class="ri-download-cloud-fill"></i> SIMPAN HASIL RENDER
-                </button>
             </div>
+            
+            <!-- Tempat Notifikasi Ukuran Layar Muncul -->
+            <div id="res-hint"></div>
+
+            <div class="grid-2" style="margin-top: 12px;">
+                <div class="form-group">
+                    <label>RENDER SCALE</label>
+                    <select id="scale">
+                        <option value="1">1x (Standar)</option>
+                        <option value="2">2x (HD)</option>
+                        <option value="3">3x (Ultra)</option>
+                    </select>
+                </div>
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" id="fullpage">
+                    <span>Full Page Capture</span>
+                </label>
+            </div>
+
+            <button type="submit" id="submit-btn" class="btn">
+                <span id="btn-text">AMBIL GAMBAR</span>
+                <i class="ri-flashlight-line" id="btn-icon"></i>
+                <div class="loader" id="loader"></div>
+            </button>
+        </form>
+
+        <div id="result-area">
+            <div class="img-container">
+                <img id="result-img" src="" alt="Hasil Render">
+            </div>
+            <button id="download-btn" class="btn btn-success">
+                <i class="ri-download-line"></i> SIMPAN GAMBAR
+            </button>
         </div>
-
-        <footer>
-            <!-- 1. Teks Powered By -->
-            <div class="powered-text">
-                Powered by<br>
-                <strong>✧･ﾟ: [𝙍]𝙝𝙢𝙏 | 𝘾𝙤𝙙𝙚⚙️𝘼𝙄 𝙡 :･ﾟ✧</strong>
-            </div>
-
-            <!-- 2. Tombol Join Saluran (Spesial & Terpisah) -->
-            <div class="join-channel-box">
-                <a href="https://whatsapp.com/channel/0029VbBjyjlJ93wa6hwSWa0p" target="_blank" class="btn-join-saluran">
-                    <i class="ri-whatsapp-fill"></i> JOIN SALURAN WHATSAPP
-                </a>
-            </div>
-
-            <!-- 3. Icon Sosmed Lainnya -->
-            <div class="social-links">
-                <a href="https://www.instagram.com/rahmt_nhw?igsh=MWQwcnB3bTA2ZnVidg==" target="_blank"><i class="ri-instagram-line"></i></a>
-                <a href="https://www.tiktok.com/@r_hmtofc?_r=1&_t=ZS-94KRfWQjeUu" target="_blank"><i class="ri-tiktok-fill"></i></a>
-                <a href="https://t.me/rAi_engine" target="_blank"><i class="ri-telegram-fill"></i></a>
-            </div>
-        </footer>
     </div>
 
-    <script>
-        // Logika aslinya nggak diganggu gugat bro
-        const API_URL = '/api/screenshot';
+    <footer>
+        <!-- 1. Powered By -->
+        <div class="powered-text">
+            Powered by<br>
+            <strong>✧･ﾟ: [𝙍]𝙝𝙢𝙏 | 𝘾𝙤𝙙𝙚⚙️𝘼𝙄 𝙡 :･ﾟ✧</strong>
+        </div>
 
+        <!-- 2. Tombol Join Saluran (Kuning/Beda Sendiri) -->
+        <div class="join-channel-box">
+            <a href="https://whatsapp.com/channel/0029VbBjyjlJ93wa6hwSWa0p" target="_blank" class="btn-join-saluran">
+                <i class="ri-whatsapp-line"></i> JOIN SALURAN WHATSAPP
+            </a>
+        </div>
+
+        <!-- 3. Icon Sosmed (Hitam/Putih) -->
+        <div class="social-links">
+            <a href="https://www.instagram.com/rahmt_nhw?igsh=MWQwcnB3bTA2ZnVidg==" target="_blank"><i class="ri-instagram-line"></i></a>
+            <a href="https://www.tiktok.com/@r_hmtofc?_r=1&_t=ZS-94KRfWQjeUu" target="_blank"><i class="ri-tiktok-line"></i></a>
+            <a href="https://t.me/rAi_engine" target="_blank"><i class="ri-telegram-line"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        // ================= LOGIKA FITUR UKURAN (HINT RESOLUSI) =================
+        const wInput = document.getElementById('width');
+        const hInput = document.getElementById('height');
+        const resHint = document.getElementById('res-hint');
+
+        function updateResHint() {
+            const w = parseInt(wInput.value) || 0;
+            const h = parseInt(hInput.value) || 0;
+            let icon = 'ri-computer-line';
+            let text = 'Desktop/Tablet';
+            
+            if (w < 600) {
+                icon = 'ri-smartphone-line'; text = 'Mobile Phone';
+            } else if (w === 1280 && h === 720) {
+                text = 'Desktop (HD)';
+            } else if (w === 1920 && h === 1080) {
+                text = 'Desktop (Full HD)';
+            }
+
+            resHint.innerHTML = `<i class="${icon}"></i> Ukuran = ${w} x ${h} (${text})`;
+            resHint.style.display = 'block';
+        }
+
+        // Munculin teks waktu kolom diklik atau angkanya diganti
+        wInput.addEventListener('focus', updateResHint);
+        hInput.addEventListener('focus', updateResHint);
+        wInput.addEventListener('input', updateResHint);
+        hInput.addEventListener('input', updateResHint);
+
+        // Hilangin teks kalau udah gak di-klik
+        wInput.addEventListener('blur', () => resHint.style.display = 'none');
+        hInput.addEventListener('blur', () => resHint.style.display = 'none');
+
+
+        // ================= LOGIKA API CAPTURE (TETAP AMAN) =================
+        const API_URL = '/api/screenshot';
         const form = document.getElementById('ss-form');
         const submitBtn = document.getElementById('submit-btn');
         const btnText = document.getElementById('btn-text');
@@ -471,8 +408,8 @@
 
             const payload = {
                 url: document.getElementById('url').value,
-                width: parseInt(document.getElementById('width').value) || 1280,
-                height: parseInt(document.getElementById('height').value) || 720,
+                width: parseInt(wInput.value) || 1280,
+                height: parseInt(hInput.value) || 720,
                 device_scale: parseInt(document.getElementById('scale').value) || 1,
                 full_page: document.getElementById('fullpage').checked
             };
@@ -499,7 +436,7 @@
                 alert('Terjadi kesalahan koneksi.');
             } finally {
                 submitBtn.disabled = false;
-                btnText.textContent = 'INITIALIZE CAPTURE';
+                btnText.textContent = 'AMBIL GAMBAR';
                 btnIcon.style.display = 'inline-block';
                 loader.style.display = 'none';
             }
@@ -510,7 +447,7 @@
             const imageUrl = resultImg.src;
             
             const originalHTML = downloadBtn.innerHTML;
-            downloadBtn.innerHTML = '<div class="loader" style="display:inline-block; border-color: #fff; border-top-color: transparent;"></div> MENDOWNLOAD...';
+            downloadBtn.innerHTML = '<div class="loader" style="display:inline-block; border-color: #000; border-top-color: transparent;"></div>';
             
             try {
                 const response = await fetch(imageUrl);
@@ -519,7 +456,7 @@
                 
                 const a = document.createElement('a');
                 a.href = tempUrl;
-                a.download = `capture-engine-${new Date().getTime()}.png`;
+                a.download = `capture-${new Date().getTime()}.png`;
                 
                 document.body.appendChild(a);
                 a.click();
@@ -534,4 +471,4 @@
         });
     </script>
 </body>
-    </html>
+                    </html>
