@@ -1,60 +1,37 @@
 const axios = require('axios');
 
-// Handler utama untuk Vercel Serverless Function
 module.exports = async (req, res) => {
-    // Setup CORS agar bisa diakses dari frontend
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-    res.setHeader(
-        'Access-Control-Allow-Headers',
-        'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-    );
+    const { url } = req.query;
 
-    if (req.method === 'OPTIONS') {
-        res.status(200).end();
-        return;
+    if (!url) {
+        return res.status(400).json({ error: 'URL gambar tidak ditemukan bro.' });
     }
-
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method Not Allowed. Use POST.' });
-    }
-
-    const { url, width = 1280, height = 720, full_page = false, device_scale = 1 } = req.body;
 
     try {
-        if (!url || !url.startsWith('http')) {
-            throw new Error('URL tidak valid. Pastikan menggunakan https://');
-        }
-
-        // Logic asli Anda
-        const { data } = await axios.post('https://gcp.imagy.app/screenshot/createscreenshot', {
+        // Nembak langsung ke URL gambar dari provider
+        const response = await axios({
+            method: 'GET',
             url: url,
-            browserWidth: parseInt(width),
-            browserHeight: parseInt(height),
-            fullPage: full_page === true || full_page === 'true', // Handle string/boolean
-            deviceScaleFactor: parseInt(device_scale),
-            format: 'png'
-        }, {
+            responseType: 'arraybuffer', // Wajib arraybuffer biar gambar gak corrupt
             headers: {
-                'content-type': 'application/json',
-                referer: 'https://imagy.app/full-page-screenshot-taker/',
-                'user-agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
             }
         });
 
-        if (!data.fileUrl) throw new Error('Gagal mendapatkan gambar dari provider.');
+        // Ambil tipe file asli (misal: image/png)
+        const contentType = response.headers['content-type'] || 'image/png';
 
-        return res.status(200).json({ 
-            success: true, 
-            image_url: data.fileUrl,
-            creator: "✧･ﾟ: [𝙍]𝙝𝙢𝙏 | 𝘾𝙤𝙙𝙚⚙️𝘼𝙄 𝙡 :･ﾟ✧"
-        });
+        // Set Header biar browser ngizinin download dan bypass CORS
+        res.setHeader('Content-Type', contentType);
+        res.setHeader('Content-Disposition', `attachment; filename="R_hmt-Capture-${Date.now()}.png"`);
+        res.setHeader('Access-Control-Allow-Origin', '*'); 
+        res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+
+        // WAJIB: Convert data arraybuffer ke Buffer biar Vercel bisa ngirim dengan aman
+        res.status(200).send(Buffer.from(response.data));
 
     } catch (error) {
-        return res.status(500).json({ 
-            success: false, 
-            message: error.message 
-        });
+        console.error('Proxy Error:', error.message);
+        res.status(500).json({ error: 'Gagal mendownload gambar via proxy internal.' });
     }
 };
