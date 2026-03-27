@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* ================= TEMA 3 WARNA (HITAM, PUTIH, SOFT INDIGO) ================= */
+        /* ================= TEMA (HITAM, PUTIH, SOFT INDIGO) ================= */
         :root {
             --bg-base: #09090b; 
             --card-bg: #121214; 
@@ -28,7 +28,6 @@
         
         body {
             background-color: var(--bg-base);
-            /* Background Grid Modern ala Blueprint */
             background-image: 
                 linear-gradient(var(--border) 1px, transparent 1px),
                 linear-gradient(90deg, var(--border) 1px, transparent 1px);
@@ -104,7 +103,6 @@
             outline: none;
             transition: 0.2s;
             height: 42px;
-            appearance: none; /* Biar panah bawaan browser hilang */
         }
 
         input[type="number"], select { padding-left: 12px; }
@@ -114,18 +112,82 @@
             box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
         }
 
-        /* Icon dropdown manual biar rapi */
-        .select-wrapper { position: relative; }
-        .select-wrapper::after {
-            content: '\EA4S'; /* Kode remix icon untuk ri-arrow-down-s-line */
-            font-family: 'remixicon';
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            pointer-events: none;
+        /* ================= CUSTOM DROPDOWN (YANG LU MAU) ================= */
+        .custom-dropdown {
+            position: relative;
+            width: 100%;
         }
+
+        .dropdown-selected {
+            background: var(--bg-base);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0 15px;
+            height: 42px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-main);
+            transition: 0.2s;
+        }
+
+        .dropdown-selected:hover {
+            border-color: var(--accent);
+        }
+
+        .dropdown-options {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            list-style: none;
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+        }
+
+        /* Saat dropdown aktif, list muncul */
+        .custom-dropdown.active .dropdown-options {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .custom-dropdown.active .dropdown-selected i {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-options li {
+            padding: 12px 15px;
+            font-size: 13px;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dropdown-options li:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-options li:hover, .dropdown-options li.selected {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--text-main);
+        }
+        
+        .dropdown-options li i { font-size: 16px; color: var(--accent); }
 
         .grid-2 {
             display: grid;
@@ -151,7 +213,6 @@
             cursor: pointer;
         }
 
-        /* Tombol Utama */
         .btn {
             width: 100%;
             background: var(--accent);
@@ -186,7 +247,6 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Area Hasil Screenshot */
         #result-area {
             display: none;
             margin-top: 25px;
@@ -210,7 +270,6 @@
         }
         .btn-success:hover { background: var(--border); }
 
-        /* ================= FOOTER ================= */
         footer {
             margin-top: 30px;
             text-align: center;
@@ -230,7 +289,6 @@
             font-weight: 700;
         }
 
-        /* Tombol Join Saluran */
         .join-channel-box {
             margin-bottom: 20px;
         }
@@ -255,7 +313,6 @@
             color: #ffffff;
         }
 
-        /* Icon Sosmed */
         .social-links {
             display: flex;
             justify-content: center;
@@ -287,17 +344,24 @@
                 </div>
             </div>
 
+            <!-- CUSTOM DROPDOWN UI -->
             <div class="form-group">
                 <label>PILIH PERANGKAT (RESOLUSI)</label>
-                <div class="select-wrapper">
-                    <select id="device-preset">
-                        <option value="phone">Mobile (375 x 812)</option>
-                        <option value="ipad">Tablet (768 x 1024)</option>
-                        <option value="laptop">Laptop (1366 x 768)</option>
-                        <option value="pcfhd" selected>PC FHD (1920 x 1080)</option>
-                        <option value="pc4k">PC 4K (3840 x 2160)</option>
-                        <option value="custom">Custom (Atur Manual)</option>
-                    </select>
+                <div class="custom-dropdown" id="device-dropdown">
+                    <!-- Bagian yang diklik -->
+                    <div class="dropdown-selected" id="dropdown-selected">
+                        <span id="dropdown-text"><i class="ri-computer-line" style="margin-right:8px; color:var(--accent);"></i>PC FHD (1920 x 1080)</span>
+                        <i class="ri-arrow-down-s-line" style="transition:0.3s;"></i>
+                    </div>
+                    <!-- Daftar Opsi yang muncul -->
+                    <ul class="dropdown-options" id="dropdown-options">
+                        <li data-w="375" data-h="812"><i class="ri-smartphone-line"></i>Mobile (375 x 812)</li>
+                        <li data-w="768" data-h="1024"><i class="ri-tablet-line"></i>Tablet (768 x 1024)</li>
+                        <li data-w="1366" data-h="768"><i class="ri-macbook-line"></i>Laptop (1366 x 768)</li>
+                        <li data-w="1920" data-h="1080" class="selected"><i class="ri-computer-line"></i>PC FHD (1920 x 1080)</li>
+                        <li data-w="3840" data-h="2160"><i class="ri-tv-2-line"></i>PC 4K (3840 x 2160)</li>
+                        <li data-w="custom" data-h="custom"><i class="ri-settings-4-line"></i>Custom (Atur Manual)</li>
+                    </ul>
                 </div>
             </div>
 
@@ -315,11 +379,12 @@
             <div class="grid-2">
                 <div class="form-group">
                     <label>RENDER SCALE</label>
-                    <div class="select-wrapper">
-                        <select id="scale">
+                    <div class="input-wrapper" style="position:relative;">
+                        <select id="scale" style="appearance:none; padding-left:15px;">
                             <option value="1">1x (Standar)</option>
                             <option value="2">2x (Retina HD)</option>
                         </select>
+                        <i class="ri-arrow-down-s-line" style="left:auto; right:12px;"></i>
                     </div>
                 </div>
                 <label class="checkbox-wrapper">
@@ -365,32 +430,56 @@
     </footer>
 
     <script>
-        // ================= LOGIKA DROPDOWN RESOLUSI =================
-        const presetSelect = document.getElementById('device-preset');
+        // ================= LOGIKA CUSTOM DROPDOWN =================
+        const dropdown = document.getElementById('device-dropdown');
+        const dropdownSelected = document.getElementById('dropdown-selected');
+        const dropdownText = document.getElementById('dropdown-text');
+        const optionsList = document.querySelectorAll('.dropdown-options li');
         const wInput = document.getElementById('width');
         const hInput = document.getElementById('height');
 
-        const deviceSizes = {
-            phone: { w: 375, h: 812 },
-            ipad: { w: 768, h: 1024 },
-            laptop: { w: 1366, h: 768 },
-            pcfhd: { w: 1920, h: 1080 },
-            pc4k: { w: 3840, h: 2160 }
-        };
+        // Buka tutup dropdown kalau diklik
+        dropdownSelected.addEventListener('click', () => {
+            dropdown.classList.toggle('active');
+        });
 
-        presetSelect.addEventListener('change', (e) => {
-            const presetVal = e.target.value;
-            
-            // Set ukuran otomatis sesuai data-preset dropdown
-            if (presetVal !== 'custom' && deviceSizes[presetVal]) {
-                wInput.value = deviceSizes[presetVal].w;
-                hInput.value = deviceSizes[presetVal].h;
+        // Tutup dropdown kalau klik di luar kotak
+        document.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove('active');
             }
         });
 
-        // Kalau ngetik manual di Lebar/Tinggi, pindah mode ke Custom otomatis
+        // Event saat opsi dipilih
+        optionsList.forEach(option => {
+            option.addEventListener('click', () => {
+                // Hapus class selected di list yang lain
+                optionsList.forEach(li => li.classList.remove('selected'));
+                option.classList.add('selected');
+
+                // Ubah teks di tombol
+                dropdownText.innerHTML = option.innerHTML;
+
+                // Ambil ukuran dari data attribute
+                const w = option.getAttribute('data-w');
+                const h = option.getAttribute('data-h');
+
+                if (w !== 'custom') {
+                    wInput.value = w;
+                    hInput.value = h;
+                }
+
+                // Tutup dropdown
+                dropdown.classList.remove('active');
+            });
+        });
+
+        // Kalau isi input manual, set dropdown ke Custom otomatis
         const setCustom = () => {
-            presetSelect.value = 'custom';
+            optionsList.forEach(li => li.classList.remove('selected'));
+            const customOption = document.querySelector('li[data-w="custom"]');
+            customOption.classList.add('selected');
+            dropdownText.innerHTML = customOption.innerHTML;
         };
         wInput.addEventListener('input', setCustom);
         hInput.addEventListener('input', setCustom);
@@ -452,36 +541,31 @@
             }
         });
 
-        // ================= LOGIKA DOWNLOAD DENGAN INTERNAL PROXY =================
+        // ================= LOGIKA DOWNLOAD ASLI (TANPA PROXY) =================
         downloadBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             const imageUrl = resultImg.src;
-            
             if (!imageUrl) return;
 
             const originalHTML = downloadBtn.innerHTML;
             downloadBtn.innerHTML = '<div class="loader" style="display:inline-block; border-color: var(--text-main); border-top-color: transparent;"></div> MENDOWNLOAD...';
             
             try {
-                // Nembak proxy internal yang udah dibikin
-                const proxyUrl = `/api/proxy?url=${encodeURIComponent(imageUrl)}`;
-                
-                const response = await fetch(proxyUrl);
-                if (!response.ok) throw new Error("Gagal mengambil gambar dari internal proxy");
-                
+                // BALIK KE FUNGSI ASLI LU
+                const response = await fetch(imageUrl);
                 const blob = await response.blob();
                 const tempUrl = window.URL.createObjectURL(blob);
                 
                 const a = document.createElement('a');
                 a.href = tempUrl;
-                a.download = `Rhmt-Capture-${new Date().getTime()}.png`;
+                a.download = `Capture-${new Date().getTime()}.png`;
                 
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(tempUrl);
             } catch (err) {
-                console.error("Download lewat proxy gagal, buka di tab baru...", err);
+                console.error("Gagal auto-download, fallback ke tab baru", err);
                 window.open(imageUrl, '_blank'); 
             } finally {
                 downloadBtn.innerHTML = originalHTML;
@@ -489,4 +573,4 @@
         });
     </script>
 </body>
-</html>
+        </html>
