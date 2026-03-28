@@ -1,7 +1,6 @@
 const axios = require('axios');
 
 module.exports = async (req, res) => {
-    // Setup CORS bawaan lu
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -19,32 +18,37 @@ module.exports = async (req, res) => {
         return res.status(405).json({ error: 'Method Not Allowed. Use POST.' });
     }
 
-    const { url, width = 1280, height = 720, full_page = false, device_scale = 1 } = req.body;
+    // 1. Nangkap parameter 'delay' yang dikirim dari HTML lu
+    const { url, width = 1280, height = 720, full_page = false, device_scale = 1, delay = 0 } = req.body;
 
     try {
         if (!url || !url.startsWith('http')) {
             throw new Error('URL tidak valid. Pastikan menggunakan https://');
         }
 
-        // 100% LOGIKA ASLI: Nembak ke provider bawaan (gcp.imagy.app)
+        // 2. Convert delay dari format Detik ke Millisecond (15 detik = 15000 ms)
+        // Kalau user nggak ngisi, defaultnya 0 (langsung jepret)
+        const delayMs = parseInt(delay) * 1000;
+
+        // 3. Tembak API Imagy dengan tambahan parameter delay
         const { data } = await axios.post('https://gcp.imagy.app/screenshot/createscreenshot', {
             url: url,
             browserWidth: parseInt(width),
             browserHeight: parseInt(height),
             fullPage: full_page === true || full_page === 'true',
             deviceScaleFactor: parseInt(device_scale),
+            delay: delayMs, // <--- INI KUNCI DELAY-NYA BRO
             format: 'png'
         }, {
             headers: {
                 'content-type': 'application/json',
                 referer: 'https://imagy.app/full-page-screenshot-taker/',
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
             }
         });
 
         if (!data.fileUrl) throw new Error('Gagal mendapatkan gambar dari provider.');
 
-        // Mengembalikan respons dengan nama lu sebagai creator
         return res.status(200).json({ 
             success: true, 
             image_url: data.fileUrl,
@@ -52,7 +56,6 @@ module.exports = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
         return res.status(500).json({ 
             success: false, 
             message: error.message 
