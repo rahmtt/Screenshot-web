@@ -3,399 +3,493 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Capture Tool</title>
+    <title>Web Capture Tool | R_hmt ofc</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* ================= TEMA (HITAM, PUTIH, SOFT INDIGO) ================= */
+        /* ================= TEMA NEON CYBER (NO EMOJI) ================= */
         :root {
-            --bg-base: #09090b; 
-            --card-bg: #121214; 
-            --text-main: #fafafa;
-            --text-muted: #a1a1aa;
-            --accent: #6366f1; 
-            --accent-hover: #818cf8;
-            --border: #27272a;
+            --bg-black: #000000;
+            --bg-card: #08080a;
+            --text-main: #e4e4e7;
+            --text-muted: #71717a;
+            /* Warna Neon Pendekatan Baru: Soft Indigo */
+            --glow-main: #6366f1; 
+            --glow-dim: rgba(99, 102, 241, 0.2);
+            --border-glow: rgba(99, 102, 241, 0.3);
+            --bg-grid: #0f1115;
         }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Inter', sans-serif;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::selection { background: var(--glow-dim); color: #fff; }
+
         body {
-            background-color: var(--bg-base);
+            background-color: var(--bg-black);
+            /* UPGRADE BACKGROUND: Digital Grid Pattern */
             background-image: 
-                linear-gradient(var(--border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 40px 40px;
-            background-position: center center;
+                linear-gradient(var(--bg-grid) 1px, transparent 1px),
+                linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+            background-size: 20px 20px;
             color: var(--text-main);
+            font-family: 'Inter', sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 40px 15px;
+            position: relative;
+        }
+
+        /* Cahaya di belakang card (Glow) */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 20%; left: 50%; transform: translateX(-50%);
+            width: 500px; height: 500px;
+            background: var(--glow-main);
+            filter: blur(250px);
+            opacity: 0.15;
+            z-index: -1;
         }
 
         .container {
             width: 100%;
-            max-width: 440px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 30px 25px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
+            max-width: 480px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            padding: 35px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 15px var(--glow-dim);
+            backdrop-filter: blur(15px);
+            animation: fadeIn 0.8s ease;
         }
 
+        /* LOGO DIPERBESAR & GLOW PULSE */
         .header-brand {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
+            animation: logoPulse 4s infinite alternate;
         }
 
         .header-brand i {
-            font-size: 32px;
-            color: var(--accent);
+            font-size: 48px; /* Diperbesar */
+            color: var(--glow-main);
+            text-shadow: 0 0 15px var(--glow-main);
         }
 
         .header-brand h1 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-top: 8px;
-            letter-spacing: 1.5px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px; /* Diperbesar */
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #fff;
+            margin-top: 10px;
             text-transform: uppercase;
+            text-shadow: 0 0 10px var(--glow-main);
         }
 
-        .form-group { margin-bottom: 15px; }
+        .form-group { margin-bottom: 18px; }
 
         label {
             display: block;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-muted);
-            margin-bottom: 6px;
+            margin-bottom: 7px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
         }
 
         .input-wrapper { position: relative; }
         .input-wrapper i {
             position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
+            left: 15px; top: 50%; transform: translateY(-50%);
             color: var(--text-muted);
-            font-size: 15px;
+            font-size: 16px;
         }
 
-        input[type="url"], input[type="number"], select {
+        input[type="url"] {
             width: 100%;
-            background: var(--bg-base);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            padding: 10px 12px 10px 36px;
-            font-size: 13px;
-            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 12px 15px 12px 42px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
             outline: none;
-            transition: 0.2s;
-            height: 42px;
+            height: 44px;
+            transition: all 0.3s ease;
         }
 
-        input[type="number"], select { padding-left: 12px; }
-
-        input:focus, select:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        input:focus {
+            border-color: var(--glow-main);
+            box-shadow: 0 0 10px var(--glow-dim);
+            background: rgba(99, 102, 241, 0.03);
         }
 
-        /* ================= CUSTOM DROPDOWN (YANG LU MAU) ================= */
-        .custom-dropdown {
-            position: relative;
-            width: 100%;
-        }
-
-        .dropdown-selected {
-            background: var(--bg-base);
-            border: 1px solid var(--border);
-            border-radius: 6px;
+        /* ============================================== */
+        /* UI: CUSTOM DROPDOWN (PILIH RESOLUSI) */
+        /* ============================================== */
+        .select-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 0 15px;
-            height: 42px;
+            height: 44px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .select-row:hover {
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .select-row:focus-within {
+            border-color: var(--glow-main);
+            box-shadow: 0 0 10px var(--glow-dim);
+            background: rgba(99, 102, 241, 0.03);
+        }
+
+        .select-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .select-content i {
+            font-size: 18px;
+            color: var(--text-muted);
+        }
+        
+        .select-row .arrow-icon {
+            font-size: 16px;
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+        
+        .select-row:focus-within .arrow-icon {
+            transform: rotate(180deg);
+            color: var(--glow-main);
+        }
+
+        /* Sliding Panel (Preset Perangkat) */
+        .preset-panel {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-glow);
+            border-top-left-radius: 16px; border-top-right-radius: 16px;
+            z-index: 1000;
+            transform: translateY(100%); /* Hidden by default */
+            transition: transform 0.3s ease-out;
+            padding: 25px;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5), 0 0 15px var(--glow-dim);
+        }
+        
+        .preset-panel.active {
+            transform: translateY(0); /* Visible */
+        }
+
+        .panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: pointer;
-            font-size: 13px;
-            color: var(--text-main);
-            transition: 0.2s;
-        }
-
-        .dropdown-selected:hover {
-            border-color: var(--accent);
-        }
-
-        .dropdown-options {
-            position: absolute;
-            top: calc(100% + 5px);
-            left: 0;
-            width: 100%;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            list-style: none;
-            max-height: 220px;
-            overflow-y: auto;
-            z-index: 100;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.2s ease;
-        }
-
-        /* Saat dropdown aktif, list muncul */
-        .custom-dropdown.active .dropdown-options {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .custom-dropdown.active .dropdown-selected i {
-            transform: rotate(180deg);
-        }
-
-        .dropdown-options li {
-            padding: 12px 15px;
-            font-size: 13px;
-            color: var(--text-muted);
-            cursor: pointer;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .dropdown-options li:last-child {
-            border-bottom: none;
-        }
-
-        .dropdown-options li:hover, .dropdown-options li.selected {
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--text-main);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
         }
         
-        .dropdown-options li i { font-size: 16px; color: var(--accent); }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
+        .panel-header h3 {
+            font-size: 16px;
+            font-weight: 700;
         }
+        
+        .close-panel-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 22px;
+            cursor: pointer;
+        }
+        .close-panel-btn:hover { color: #fff; }
+
+        .preset-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        
+        .preset-item {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+        }
+        
+        .preset-item:hover {
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+        
+        .preset-item.selected {
+            border-color: var(--glow-main);
+            background: rgba(99, 102, 241, 0.05);
+            color: var(--glow-main);
+            box-shadow: 0 0 10px var(--glow-dim);
+        }
+        
+        .preset-item i { font-size: 18px; color: var(--text-muted); }
+        .preset-item.selected i { color: var(--glow-main); }
 
         .checkbox-wrapper {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 24px;
+            gap: 10px;
+            margin-top: 30px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 500;
             color: var(--text-muted);
         }
 
         .checkbox-wrapper input {
-            accent-color: var(--accent);
-            width: 16px;
-            height: 16px;
+            appearance: none;
+            width: 18px; height: 18px;
+            border: 2px solid #333;
+            border-radius: 4px;
             cursor: pointer;
+            position: relative;
+            transition: 0.2s;
+        }
+        .checkbox-wrapper input:checked {
+            border-color: var(--glow-main);
+            background-color: var(--glow-main);
+            box-shadow: 0 0 8px var(--glow-dim);
+        }
+        .checkbox-wrapper input:checked::after {
+            content: 'ri-check-line'; font-family: 'remixicon'; font-size: 14px;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: #000; font-weight: bold;
         }
 
+        /* Tombol Utama (Glow) */
         .btn {
             width: 100%;
-            background: var(--accent);
-            color: #ffffff;
+            background: linear-gradient(135deg, var(--glow-main) 0%, #0072ff 100%);
+            color: #000;
             border: none;
-            height: 44px;
-            font-size: 13px;
-            font-weight: 600;
-            border-radius: 6px;
+            height: 48px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            border-radius: 8px;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
-            margin-top: 20px;
-            transition: 0.2s;
+            gap: 10px;
+            margin-top: 25px;
+            transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 20px rgba(0, 114, 255, 0.4);
         }
 
-        .btn:hover { background: var(--accent-hover); }
-        .btn:disabled { background: var(--border); color: var(--text-muted); cursor: not-allowed; }
+        .btn:hover {
+            box-shadow: 0 8px 25px rgba(0, 240, 255, 0.6);
+            transform: translateY(-2px);
+        }
+        .btn:disabled { background: #333; color: #666; box-shadow: none; cursor: not-allowed; transform: none; }
 
         .loader {
-            width: 16px;
-            height: 16px;
-            border: 2px solid #ffffff;
-            border-top-color: transparent;
+            width: 18px; height: 18px;
+            border: 3px solid rgba(0,0,0,0.3); border-top-color: #000;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             display: none;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes logoPulse { 0% { opacity: 1; } 100% { opacity: 0.8; filter: drop-shadow(0 0 20px var(--glow-main)); } }
 
+        /* Area Hasil Screenshot */
         #result-area {
             display: none;
-            margin-top: 25px;
-            border-top: 1px dashed var(--border);
-            padding-top: 20px;
+            margin-top: 30px;
+            border-top: 1px dashed rgba(255,255,255,0.1);
+            padding-top: 25px;
+            animation: fadeIn 0.5s ease;
         }
 
         .img-container { 
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 8px; 
-            background: var(--bg-base);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 10px; 
+            background: rgba(0,0,0,0.4);
             text-align: center; 
+            box-shadow: 0 0 15px var(--glow-dim);
         }
-        .img-container img { max-width: 100%; display: block; border-radius: 4px; }
+        .img-container img { max-width: 100%; display: block; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); }
 
         .btn-success {
             background: transparent;
-            color: var(--text-main);
-            border: 1px solid var(--border);
+            color: var(--glow-main);
+            border: 1px solid var(--glow-main);
+            box-shadow: none;
+            margin-top: 20px;
         }
-        .btn-success:hover { background: var(--border); }
+        .btn-success:hover {
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 15px var(--glow-dim);
+        }
 
+        /* Overlay buat nutup panel */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            display: none;
+        }
+
+        /* ================= FOOTER REQUEST KHUSUS ================= */
         footer {
-            margin-top: 30px;
+            margin-top: 40px;
             text-align: center;
             width: 100%;
-            max-width: 440px;
+            max-width: 480px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
 
+        /* 1. POWERED BY (Pindah ke atas tombol) */
         .powered-text {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--text-muted);
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
         .powered-text strong {
             color: var(--text-main);
-            font-size: 12px;
             font-weight: 700;
+            text-shadow: 0 0 5px rgba(255,255,255,0.3);
         }
 
-        .join-channel-box {
-            margin-bottom: 20px;
-        }
-        
+        /* 2. Tombol Join Saluran */
+        .join-channel-box { margin-bottom: 25px; }
         .btn-join-saluran {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 10px 20px;
-            border-radius: 6px;
+            gap: 10px;
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid var(--glow-main);
+            color: var(--glow-main);
+            padding: 12px 25px;
+            border-radius: 30px;
             text-decoration: none;
-            font-size: 12px;
-            font-weight: 600;
-            transition: 0.2s;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px var(--glow-dim);
         }
-        
         .btn-join-saluran:hover {
-            background: var(--accent);
-            color: #ffffff;
+            background: var(--glow-main);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
+            transform: scale(1.03);
         }
 
+        /* 3. Icon Sosmed biasa */
         .social-links {
             display: flex;
             justify-content: center;
-            gap: 18px;
+            gap: 20px;
         }
         .social-links a {
             color: var(--text-muted);
-            font-size: 20px;
+            font-size: 22px;
             text-decoration: none;
             transition: 0.2s;
         }
-        .social-links a:hover { color: var(--text-main); }
+        .social-links a:hover { color: #fff; transform: translateY(-3px); }
+
+        /* Responsive Mobile */
+        @media (max-width: 480px) {
+            .container { padding: 25px 20px; }
+            .header-brand h1 { font-size: 20px; }
+            .header-brand i { font-size: 40px; }
+            .preset-list { max-height: 200px; }
+        }
     </style>
 </head>
 <body>
 
+    <div class="overlay" id="overlay"></div>
+
     <div class="container">
         <div class="header-brand">
-            <i class="ri-camera-lens-fill"></i>
-            <h1>Web Capture</h1>
+            <i class="ri-radar-fill"></i>
+            <h1>WEB CAPTURE</h1>
         </div>
 
         <form id="ss-form">
             <div class="form-group">
                 <label>URL TARGET</label>
                 <div class="input-wrapper">
-                    <i class="ri-link"></i>
+                    <i class="ri-links-line"></i>
                     <input type="url" id="url" placeholder="https://domain-target.com" required>
                 </div>
             </div>
 
-            <!-- CUSTOM DROPDOWN UI -->
             <div class="form-group">
                 <label>PILIH PERANGKAT (RESOLUSI)</label>
-                <div class="custom-dropdown" id="device-dropdown">
-                    <!-- Bagian yang diklik -->
-                    <div class="dropdown-selected" id="dropdown-selected">
-                        <span id="dropdown-text"><i class="ri-computer-line" style="margin-right:8px; color:var(--accent);"></i>PC FHD (1920 x 1080)</span>
-                        <i class="ri-arrow-down-s-line" style="transition:0.3s;"></i>
+                <div class="select-row" id="select-preset-row" tabindex="0">
+                    <div class="select-content" id="selected-device-content">
+                        <i class="ri-computer-line" id="selected-icon"></i>
+                        <span id="selected-text">PILIH PRESET</span>
                     </div>
-                    <!-- Daftar Opsi yang muncul -->
-                    <ul class="dropdown-options" id="dropdown-options">
-                        <li data-w="375" data-h="812"><i class="ri-smartphone-line"></i>Mobile (375 x 812)</li>
-                        <li data-w="768" data-h="1024"><i class="ri-tablet-line"></i>Tablet (768 x 1024)</li>
-                        <li data-w="1366" data-h="768"><i class="ri-macbook-line"></i>Laptop (1366 x 768)</li>
-                        <li data-w="1920" data-h="1080" class="selected"><i class="ri-computer-line"></i>PC FHD (1920 x 1080)</li>
-                        <li data-w="3840" data-h="2160"><i class="ri-tv-2-line"></i>PC 4K (3840 x 2160)</li>
-                        <li data-w="custom" data-h="custom"><i class="ri-settings-4-line"></i>Custom (Atur Manual)</li>
-                    </ul>
+                    <i class="ri-arrow-down-s-line arrow-icon"></i>
                 </div>
             </div>
 
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>LEBAR (PX)</label>
-                    <input type="number" id="width" value="1920" required>
-                </div>
-                <div class="form-group">
-                    <label>TINGGI (PX)</label>
-                    <input type="number" id="height" value="1080" required>
-                </div>
-            </div>
+            <input type="hidden" id="width" value="1920">
+            <input type="hidden" id="height" value="1080">
+            <input type="hidden" id="device_scale" value="1">
+            <input type="hidden" id="custom_active" value="false">
 
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>RENDER SCALE</label>
-                    <div class="input-wrapper" style="position:relative;">
-                        <select id="scale" style="appearance:none; padding-left:15px;">
-                            <option value="1">1x (Standar)</option>
-                            <option value="2">2x (Retina HD)</option>
-                        </select>
-                        <i class="ri-arrow-down-s-line" style="left:auto; right:12px;"></i>
-                    </div>
-                </div>
+            <div class="form-group">
                 <label class="checkbox-wrapper">
                     <input type="checkbox" id="fullpage">
-                    <span>Full Page Mode</span>
+                    <span>Full Page Capture</span>
                 </label>
             </div>
 
             <button type="submit" id="submit-btn" class="btn">
-                <span id="btn-text">AMBIL GAMBAR</span>
-                <i class="ri-focus-3-line" id="btn-icon"></i>
+                <span id="btn-text">INITIALIZE CAPTURE</span>
+                <i class="ri-radar-line" id="btn-icon"></i>
                 <div class="loader" id="loader"></div>
             </button>
         </form>
@@ -405,87 +499,107 @@
                 <img id="result-img" src="" alt="Hasil Render">
             </div>
             <button id="download-btn" class="btn btn-success">
-                <i class="ri-download-cloud-2-line"></i> SIMPAN GAMBAR
+                <i class="ri-download-cloud-3-line"></i> SIMPAN HASIL RENDER
             </button>
         </div>
     </div>
 
+    <div class="preset-panel" id="preset-panel">
+        <header class="panel-header">
+            <h3>Pilih Preset Perangkat (HD)</h3>
+            <button class="close-panel-btn" id="close-panel-btn"><i class="ri-close-line"></i></button>
+        </header>
+        <ul class="preset-list">
+            <li class="preset-item" data-w="375" data-h="812" data-s="2" data-n="Mobile (iPhone X HD)"><i class="ri-smartphone-line"></i> Mobile (iPhone X HD)</li>
+            <li class="preset-item" data-w="768" data-h="1024" data-s="2" data-n="Tablet (iPad Air HD)"><i class="ri-tablet-line"></i> Tablet (iPad Air HD)</li>
+            <li class="preset-item" data-w="1366" data-h="768" data-s="1" data-n="Laptop (Standard)"><i class="ri-macbook-line"></i> Laptop (Standard)</li>
+            <li class="preset-item" data-w="1920" data-h="1080" data-s="1" data-n="PC Full HD (1080p)"><i class="ri-computer-line"></i> PC Full HD (1080p)</li>
+            <li class="preset-item" data-w="3840" data-h="2160" data-s="1" data-n="PC Ultra 4K HD"><i class="ri-tv-2-line"></i> PC Ultra 4K HD)</li>
+        </ul>
+    </div>
+
     <footer>
         <div class="powered-text">
-            POWERED BY<br>
-            <strong>R_hmt ofc</strong>
+            POWERED BY <strong>R_hmt ofc</strong>
         </div>
 
         <div class="join-channel-box">
             <a href="https://whatsapp.com/channel/0029VbBjyjlJ93wa6hwSWa0p" target="_blank" class="btn-join-saluran">
-                <i class="ri-whatsapp-line"></i> JOIN SALURAN WHATSAPP
+                <i class="ri-whatsapp-fill"></i> JOIN SALURAN WHATSAPP
             </a>
         </div>
 
         <div class="social-links">
             <a href="https://www.instagram.com/rahmt_nhw?igsh=MWQwcnB3bTA2ZnVidg==" target="_blank"><i class="ri-instagram-line"></i></a>
-            <a href="https://www.tiktok.com/@r_hmtofc?_r=1&_t=ZS-94KRfWQjeUu" target="_blank"><i class="ri-tiktok-line"></i></a>
-            <a href="https://t.me/rAi_engine" target="_blank"><i class="ri-telegram-line"></i></a>
+            <a href="https://www.tiktok.com/@r_hmtofc?_r=1&_t=ZS-94KRfWQjeUu" target="_blank"><i class="ri-tiktok-fill"></i></a>
+            <a href="https://t.me/rAi_engine" target="_blank"><i class="ri-telegram-fill"></i></a>
         </div>
     </footer>
 
     <script>
-        // ================= LOGIKA CUSTOM DROPDOWN =================
-        const dropdown = document.getElementById('device-dropdown');
-        const dropdownSelected = document.getElementById('dropdown-selected');
-        const dropdownText = document.getElementById('dropdown-text');
-        const optionsList = document.querySelectorAll('.dropdown-options li');
+        // ================= LOGIKA UI: SLIDING PRESET PANEL =================
+        const selectPresetRow = document.getElementById('select-preset-row');
+        const presetPanel = document.getElementById('preset-panel');
+        const overlay = document.getElementById('overlay');
+        const closePanelBtn = document.getElementById('close-panel-btn');
+        const presetItems = document.querySelectorAll('.preset-item');
+        
+        // Hidden inputs
         const wInput = document.getElementById('width');
         const hInput = document.getElementById('height');
+        const sInput = document.getElementById('device_scale');
+        
+        // UI Display
+        const selectedText = document.getElementById('selected-text');
+        const selectedIcon = document.getElementById('selected-icon');
 
-        // Buka tutup dropdown kalau diklik
-        dropdownSelected.addEventListener('click', () => {
-            dropdown.classList.toggle('active');
+        // Buka panel
+        selectPresetRow.addEventListener('click', () => {
+            overlay.style.display = 'block';
+            setTimeout(() => presetPanel.classList.add('active'), 10);
         });
 
-        // Tutup dropdown kalau klik di luar kotak
-        document.addEventListener('click', (e) => {
-            if (!dropdown.contains(e.target)) {
-                dropdown.classList.remove('active');
-            }
-        });
+        // Tutup panel
+        const closePanel = () => {
+            presetPanel.classList.remove('active');
+            setTimeout(() => overlay.style.display = 'none', 300);
+        };
+        closePanelBtn.addEventListener('click', closePanel);
+        overlay.addEventListener('click', closePanel);
 
-        // Event saat opsi dipilih
-        optionsList.forEach(option => {
-            option.addEventListener('click', () => {
-                // Hapus class selected di list yang lain
-                optionsList.forEach(li => li.classList.remove('selected'));
-                option.classList.add('selected');
+        // Pilih Item
+        presetItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // Ambil data
+                const w = item.dataset.w;
+                const h = item.dataset.h;
+                const s = item.dataset.s;
+                const n = item.dataset.n;
+                const iconClass = item.querySelector('i').className;
 
-                // Ubah teks di tombol
-                dropdownText.innerHTML = option.innerHTML;
+                // Update input
+                wInput.value = w;
+                hInput.value = h;
+                sInput.value = s;
 
-                // Ambil ukuran dari data attribute
-                const w = option.getAttribute('data-w');
-                const h = option.getAttribute('data-h');
+                // Update UI Display
+                selectedText.textContent = n;
+                selectedIcon.className = iconClass;
+                selectedIcon.style.color = "var(--glow-main)"; // Neon
 
-                if (w !== 'custom') {
-                    wInput.value = w;
-                    hInput.value = h;
-                }
+                // Reset Selected Style di list
+                presetItems.forEach(pi => pi.classList.remove('selected'));
+                item.classList.add('selected');
 
-                // Tutup dropdown
-                dropdown.classList.remove('active');
+                closePanel();
             });
         });
 
-        // Kalau isi input manual, set dropdown ke Custom otomatis
-        const setCustom = () => {
-            optionsList.forEach(li => li.classList.remove('selected'));
-            const customOption = document.querySelector('li[data-w="custom"]');
-            customOption.classList.add('selected');
-            dropdownText.innerHTML = customOption.innerHTML;
-        };
-        wInput.addEventListener('input', setCustom);
-        hInput.addEventListener('input', setCustom);
+        // Set default aktif (PC FHD)
+        presetItems[3].click();
 
 
-        // ================= LOGIKA API CAPTURE =================
+        // ================= LOGIKA API CAPTURE (BAWAAN LU, JALAN) =================
         const API_URL = '/api/screenshot';
         const form = document.getElementById('ss-form');
         const submitBtn = document.getElementById('submit-btn');
@@ -500,7 +614,7 @@
             e.preventDefault();
             
             submitBtn.disabled = true;
-            btnText.textContent = 'MEMPROSES...';
+            btnText.textContent = 'INITIALIZING...';
             btnIcon.style.display = 'none';
             loader.style.display = 'block';
             resultArea.style.display = 'none';
@@ -509,11 +623,12 @@
                 url: document.getElementById('url').value,
                 width: parseInt(wInput.value) || 1280,
                 height: parseInt(hInput.value) || 720,
-                device_scale: parseInt(document.getElementById('scale').value) || 1,
+                device_scale: parseInt(sInput.value) || 1,
                 full_page: document.getElementById('fullpage').checked
             };
 
             try {
+                // Request ke Backend API asli lu (Axios di server)
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -527,38 +642,38 @@
                     resultArea.style.display = 'block';
                     resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 } else {
-                    alert('Gagal: ' + (data.message || 'Coba lagi.'));
+                    alert('Error: ' + (data.message || 'Coba lagi bro.'));
                 }
 
             } catch (error) {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan koneksi saat capture.');
+                console.error('Fetch Error:', error);
+                alert('Kesalahan koneksi API.');
             } finally {
                 submitBtn.disabled = false;
-                btnText.textContent = 'AMBIL GAMBAR';
+                btnText.textContent = 'INITIALIZE CAPTURE';
                 btnIcon.style.display = 'inline-block';
                 loader.style.display = 'none';
             }
         });
 
-        // ================= LOGIKA DOWNLOAD ASLI (TANPA PROXY) =================
+        // ================= LOGIKA DOWNLOAD ASLI (TETAP AMAN) =================
         downloadBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             const imageUrl = resultImg.src;
             if (!imageUrl) return;
 
             const originalHTML = downloadBtn.innerHTML;
-            downloadBtn.innerHTML = '<div class="loader" style="display:inline-block; border-color: var(--text-main); border-top-color: transparent;"></div> MENDOWNLOAD...';
+            downloadBtn.innerHTML = '<div class="loader" style="display:inline-block; border-color: var(--text-main); border-top-color: transparent;"></div>';
             
             try {
-                // BALIK KE FUNGSI ASLI LU
+                // BALIK KE FUNGSI ASLI LU, JALAN TANPA PROXY JS
                 const response = await fetch(imageUrl);
                 const blob = await response.blob();
                 const tempUrl = window.URL.createObjectURL(blob);
                 
                 const a = document.createElement('a');
                 a.href = tempUrl;
-                a.download = `Capture-${new Date().getTime()}.png`;
+                a.download = `capture-${new Date().getTime()}.png`;
                 
                 document.body.appendChild(a);
                 a.click();
@@ -573,4 +688,4 @@
         });
     </script>
 </body>
-        </html>
+    </html> 
