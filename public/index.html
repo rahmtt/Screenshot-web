@@ -5,602 +5,460 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web Capture Tool | R_hmt ofc</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
     
     <style>
-        /* ================= TEMA NEON CYBER (NO EMOJI) ================= */
+        /* ================= TEMA NEO BRUTALISM (MODIFIKASI) ================= */
         :root {
-            --bg-black: #000000;
-            --bg-card: #08080a;
-            --text-main: #e4e4e7;
-            --text-muted: #71717a;
-            /* Warna Neon Pendekatan Baru: Soft Indigo */
-            --glow-main: #6366f1; 
-            --glow-dim: rgba(99, 102, 241, 0.2);
-            --border-glow: rgba(99, 102, 241, 0.3);
-            --bg-grid: #0f1115;
+            /* Warna latar belakang baru: Biru keabuan sangat soft */
+            --bg-main: #eaf0f6; 
+            --black: #09090b;
+            --white: #ffffff;
+            /* Aksen warna baru biar beda dari yang asli */
+            --accent-primary: #7b61ff; /* Electric Purple */
+            --accent-secondary: #00e599; /* Mint Green */
+            --accent-yellow: #ffde00;
+            
+            --border: 3px solid var(--black);
+            --shadow: 5px 5px 0px var(--black);
+            --shadow-hover: 2px 2px 0px var(--black);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        ::selection { background: var(--glow-dim); color: #fff; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Space Grotesk', sans-serif;
+        }
 
         body {
-            background-color: var(--bg-black);
-            /* UPGRADE BACKGROUND: Digital Grid Pattern */
-            background-image: 
-                linear-gradient(var(--bg-grid) 1px, transparent 1px),
-                linear-gradient(90deg, var(--bg-grid) 1px, transparent 1px);
+            background-color: var(--bg-main);
+            /* Pola dot matrix tipis biar gak polos banget */
+            background-image: radial-gradient(#d1d8e0 2px, transparent 2px);
             background-size: 20px 20px;
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px 15px;
-            position: relative;
+            color: var(--black);
+            overflow-x: hidden;
         }
 
-        /* Cahaya di belakang card (Glow) */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 20%; left: 50%; transform: translateX(-50%);
-            width: 500px; height: 500px;
-            background: var(--glow-main);
-            filter: blur(250px);
-            opacity: 0.15;
-            z-index: -1;
+        /* ELEMEN BARU: Marquee Teks Berjalan */
+        .marquee-container {
+            width: 100%;
+            background: var(--black);
+            color: var(--white);
+            padding: 10px 0;
+            border-bottom: var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 800;
+            white-space: nowrap;
+            overflow: hidden;
         }
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 15s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Navbar Simple */
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background: var(--white);
+            border-bottom: var(--border);
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo-box {
+            background: var(--accent-primary);
+            color: var(--white);
+            border: var(--border);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            box-shadow: 3px 3px 0px var(--black);
+            border-radius: 4px;
+        }
+        .nav-brand h1 { font-size: 22px; font-weight: 800; text-transform: uppercase; }
 
         .container {
-            width: 100%;
-            max-width: 480px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-glow);
-            border-radius: 16px;
-            padding: 35px 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 15px var(--glow-dim);
-            backdrop-filter: blur(15px);
-            animation: fadeIn 0.8s ease;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
-        /* LOGO DIPERBESAR & GLOW PULSE */
-        .header-brand {
-            text-align: center;
+        /* Neo Card */
+        .neo-card {
+            background: var(--white);
+            border: var(--border);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            border-radius: 8px;
             margin-bottom: 30px;
-            animation: logoPulse 4s infinite alternate;
         }
 
-        .header-brand i {
-            font-size: 48px; /* Diperbesar */
-            color: var(--glow-main);
-            text-shadow: 0 0 15px var(--glow-main);
+        .card-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px dashed var(--black);
         }
-
-        .header-brand h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 24px; /* Diperbesar */
+        .badge {
+            background: var(--black);
+            color: var(--white);
+            padding: 5px 12px;
+            font-family: 'JetBrains Mono', monospace;
             font-weight: 800;
-            letter-spacing: 2px;
-            color: #fff;
-            margin-top: 10px;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px var(--glow-main);
+            font-size: 12px;
+            border-radius: 4px;
         }
 
-        .form-group { margin-bottom: 18px; }
+        /* Form Elements */
+        .form-group { margin-bottom: 20px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
         label {
             display: block;
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-muted);
-            margin-bottom: 7px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .input-wrapper { position: relative; }
-        .input-wrapper i {
-            position: absolute;
-            left: 15px; top: 50%; transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 16px;
-        }
-
-        input[type="url"] {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 12px 15px 12px 42px;
-            border-radius: 8px;
-            font-size: 14px;
             font-family: 'Inter', sans-serif;
-            outline: none;
-            height: 44px;
-            transition: all 0.3s ease;
-        }
-
-        input:focus {
-            border-color: var(--glow-main);
-            box-shadow: 0 0 10px var(--glow-dim);
-            background: rgba(99, 102, 241, 0.03);
-        }
-
-        /* ============================================== */
-        /* UI: CUSTOM DROPDOWN (PILIH RESOLUSI) */
-        /* ============================================== */
-        .select-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0 15px;
-            height: 44px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .select-row:hover {
-            border-color: rgba(255,255,255,0.3);
-            background: rgba(255, 255, 255, 0.02);
-        }
-        
-        .select-row:focus-within {
-            border-color: var(--glow-main);
-            box-shadow: 0 0 10px var(--glow-dim);
-            background: rgba(99, 102, 241, 0.03);
-        }
-
-        .select-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #fff;
-        }
-        
-        .select-content i {
-            font-size: 18px;
-            color: var(--text-muted);
-        }
-        
-        .select-row .arrow-icon {
-            font-size: 16px;
-            color: var(--text-muted);
-            transition: transform 0.3s ease;
-        }
-        
-        .select-row:focus-within .arrow-icon {
-            transform: rotate(180deg);
-            color: var(--glow-main);
-        }
-
-        /* Sliding Panel (Preset Perangkat) */
-        .preset-panel {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%;
-            background: var(--bg-card);
-            border-top: 1px solid var(--border-glow);
-            border-top-left-radius: 16px; border-top-right-radius: 16px;
-            z-index: 1000;
-            transform: translateY(100%); /* Hidden by default */
-            transition: transform 0.3s ease-out;
-            padding: 25px;
-            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5), 0 0 15px var(--glow-dim);
-        }
-        
-        .preset-panel.active {
-            transform: translateY(0); /* Visible */
-        }
-
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed rgba(255,255,255,0.1);
-        }
-        
-        .panel-header h3 {
-            font-size: 16px;
-            font-weight: 700;
-        }
-        
-        .close-panel-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 22px;
-            cursor: pointer;
-        }
-        .close-panel-btn:hover { color: #fff; }
-
-        .preset-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-height: 250px;
-            overflow-y: auto;
-        }
-        
-        .preset-item {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 12px 15px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.2s ease;
-        }
-        
-        .preset-item:hover {
-            border-color: rgba(255,255,255,0.2);
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-        }
-        
-        .preset-item.selected {
-            border-color: var(--glow-main);
-            background: rgba(99, 102, 241, 0.05);
-            color: var(--glow-main);
-            box-shadow: 0 0 10px var(--glow-dim);
-        }
-        
-        .preset-item i { font-size: 18px; color: var(--text-muted); }
-        .preset-item.selected i { color: var(--glow-main); }
-
-        .checkbox-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 30px;
-            cursor: pointer;
             font-size: 13px;
-            font-weight: 500;
-            color: var(--text-muted);
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-transform: uppercase;
         }
 
-        .checkbox-wrapper input {
-            appearance: none;
-            width: 18px; height: 18px;
-            border: 2px solid #333;
-            border-radius: 4px;
-            cursor: pointer;
-            position: relative;
+        .input-box {
+            display: flex;
+            align-items: center;
+            border: var(--border);
+            background: var(--bg-main);
+            height: 50px;
+            border-radius: 6px;
             transition: 0.2s;
+            overflow: hidden;
         }
-        .checkbox-wrapper input:checked {
-            border-color: var(--glow-main);
-            background-color: var(--glow-main);
-            box-shadow: 0 0 8px var(--glow-dim);
+        .input-box:focus-within {
+            background: var(--white);
+            box-shadow: 4px 4px 0px var(--accent-primary);
+            transform: translate(-2px, -2px);
         }
-        .checkbox-wrapper input:checked::after {
-            content: 'ri-check-line'; font-family: 'remixicon'; font-size: 14px;
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: #000; font-weight: bold;
+        .input-box i { padding: 0 15px; font-size: 18px; border-right: var(--border); }
+        
+        input[type="url"], input[type="number"], select {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
+            padding: 0 15px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            outline: none;
+            color: var(--black);
         }
 
-        /* Tombol Utama (Glow) */
-        .btn {
+        .unit {
+            padding: 0 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            border-left: var(--border);
+            background: var(--white);
+        }
+
+        /* Custom Select */
+        .select-box {
+            position: relative;
+            border: var(--border);
+            background: var(--white);
+            height: 50px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+        }
+        .select-box select { appearance: none; cursor: pointer; }
+        .select-box i {
+            position: absolute;
+            right: 15px;
+            pointer-events: none;
+            font-size: 20px;
+        }
+
+        /* Toggle Switch */
+        .toggle-group { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+        .neo-switch { position: relative; display: inline-block; width: 60px; height: 34px; }
+        .neo-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--white); border: var(--border); transition: .2s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: var(--black); transition: .2s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent-secondary); }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        /* Buttons */
+        .btn-neo {
             width: 100%;
-            background: linear-gradient(135deg, var(--glow-main) 0%, #0072ff 100%);
-            color: #000;
-            border: none;
-            height: 48px;
-            font-size: 14px;
-            font-weight: 700;
-            font-family: 'Orbitron', sans-serif;
-            border-radius: 8px;
+            height: 55px;
+            border: var(--border);
+            background: var(--accent-primary);
+            color: var(--white);
+            font-size: 16px;
+            font-weight: 800;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 10px;
-            margin-top: 25px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 5px 20px rgba(0, 114, 255, 0.4);
-        }
-
-        .btn:hover {
-            box-shadow: 0 8px 25px rgba(0, 240, 255, 0.6);
-            transform: translateY(-2px);
-        }
-        .btn:disabled { background: #333; color: #666; box-shadow: none; cursor: not-allowed; transform: none; }
-
-        .loader {
-            width: 18px; height: 18px;
-            border: 3px solid rgba(0,0,0,0.3); border-top-color: #000;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            display: none;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes logoPulse { 0% { opacity: 1; } 100% { opacity: 0.8; filter: drop-shadow(0 0 20px var(--glow-main)); } }
-
-        /* Area Hasil Screenshot */
-        #result-area {
-            display: none;
-            margin-top: 30px;
-            border-top: 1px dashed rgba(255,255,255,0.1);
-            padding-top: 25px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .img-container { 
-            border: 1px solid var(--border-glow);
             border-radius: 8px;
-            padding: 10px; 
-            background: rgba(0,0,0,0.4);
-            text-align: center; 
-            box-shadow: 0 0 15px var(--glow-dim);
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+            margin-top: 10px;
+            text-transform: uppercase;
         }
-        .img-container img { max-width: 100%; display: block; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05); }
+        .btn-neo:hover {
+            transform: translate(3px, 3px);
+            box-shadow: var(--shadow-hover);
+            background: #6a4ff0;
+        }
+        .btn-neo:disabled { background: #ccc; box-shadow: none; transform: none; cursor: not-allowed; color: #666; }
 
-        .btn-success {
-            background: transparent;
-            color: var(--glow-main);
-            border: 1px solid var(--glow-main);
-            box-shadow: none;
+        .download-btn {
+            background: var(--accent-secondary);
+            color: var(--black);
             margin-top: 20px;
         }
-        .btn-success:hover {
-            background: rgba(0, 240, 255, 0.1);
-            box-shadow: 0 0 15px var(--glow-dim);
+        .download-btn:hover { background: #00c986; }
+
+        .loader {
+            width: 20px; height: 20px;
+            border: 3px solid var(--white); border-top-color: transparent;
+            border-radius: 50%; animation: spin 1s linear infinite; display: none;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Preview Result */
+        #result-area { display: none; margin-top: 30px; }
+        .divider {
+            text-align: center; margin-bottom: 20px; font-weight: 800; position: relative;
+        }
+        .divider::before {
+            content: ""; position: absolute; top: 50%; left: 0; right: 0; border-top: 3px dashed var(--black); z-index: 1;
+        }
+        .divider span {
+            background: var(--white); padding: 0 15px; position: relative; z-index: 2; border: var(--border); border-radius: 20px;
         }
 
-        /* Overlay buat nutup panel */
-        .overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 999;
-            display: none;
-        }
+        .preview-window { border: var(--border); background: var(--white); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); }
+        .window-bar { background: var(--black); padding: 10px 15px; display: flex; align-items: center; gap: 10px; }
+        .circles { display: flex; gap: 6px; }
+        .c { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--black); }
+        .c.red { background: #ff5f56; } .c.yellow { background: #ffbd2e; } .c.green { background: #27c93f; }
+        .address-bar { flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--white); background: #222; padding: 4px 10px; border-radius: 4px; text-align: center; }
+        
+        .img-container { padding: 15px; background: var(--bg-main); text-align: center; }
+        .img-container img { max-width: 100%; border: var(--border); }
 
-        /* ================= FOOTER REQUEST KHUSUS ================= */
-        footer {
-            margin-top: 40px;
-            text-align: center;
-            width: 100%;
-            max-width: 480px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.05);
+        /* Footer */
+        .main-footer { text-align: center; margin-top: 50px; padding-bottom: 40px; }
+        .powered-by { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; margin-bottom: 15px; }
+        
+        .join-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--accent-yellow); color: var(--black);
+            padding: 12px 25px; border: var(--border); border-radius: 8px;
+            font-weight: 800; text-decoration: none; box-shadow: var(--shadow);
+            transition: 0.2s; margin-bottom: 25px;
         }
+        .join-btn:hover { transform: translate(2px, 2px); box-shadow: var(--shadow-hover); }
 
-        /* 1. POWERED BY (Pindah ke atas tombol) */
-        .powered-text {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .powered-text strong {
-            color: var(--text-main);
-            font-weight: 700;
-            text-shadow: 0 0 5px rgba(255,255,255,0.3);
-        }
+        .social-icons { display: flex; justify-content: center; gap: 20px; font-size: 28px; }
+        .social-icons a { color: var(--black); text-decoration: none; transition: 0.2s; }
+        .social-icons a:hover { color: var(--accent-primary); transform: translateY(-3px); }
 
-        /* 2. Tombol Join Saluran */
-        .join-channel-box { margin-bottom: 25px; }
-        .btn-join-saluran {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(0, 240, 255, 0.05);
-            border: 1px solid var(--glow-main);
-            color: var(--glow-main);
-            padding: 12px 25px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 700;
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px var(--glow-dim);
-        }
-        .btn-join-saluran:hover {
-            background: var(--glow-main);
-            color: #000;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.6);
-            transform: scale(1.03);
-        }
-
-        /* 3. Icon Sosmed biasa */
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-        .social-links a {
-            color: var(--text-muted);
-            font-size: 22px;
-            text-decoration: none;
-            transition: 0.2s;
-        }
-        .social-links a:hover { color: #fff; transform: translateY(-3px); }
-
-        /* Responsive Mobile */
-        @media (max-width: 480px) {
-            .container { padding: 25px 20px; }
-            .header-brand h1 { font-size: 20px; }
-            .header-brand i { font-size: 40px; }
-            .preset-list { max-height: 200px; }
+        @media (max-width: 600px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .container { padding: 0 15px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="overlay" id="overlay"></div>
-
-    <div class="container">
-        <div class="header-brand">
-            <i class="ri-radar-fill"></i>
-            <h1>WEB CAPTURE</h1>
+    <!-- Elemen Baru: Marquee (Teks Berjalan) -->
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <i class="ri-flashlight-fill"></i> HIGH DEFINITION WEB CAPTURE &nbsp;&nbsp;&bull;&nbsp;&nbsp; 
+            <i class="ri-rocket-2-fill"></i> FAST RENDERING ENGINE &nbsp;&nbsp;&bull;&nbsp;&nbsp; 
+            <i class="ri-code-box-fill"></i> DEVELOPED BY R_HMT OFC &nbsp;&nbsp;&bull;&nbsp;&nbsp;
+            <i class="ri-flashlight-fill"></i> HIGH DEFINITION WEB CAPTURE &nbsp;&nbsp;&bull;&nbsp;&nbsp; 
+            <i class="ri-rocket-2-fill"></i> FAST RENDERING ENGINE &nbsp;&nbsp;&bull;&nbsp;&nbsp; 
+            <i class="ri-code-box-fill"></i> DEVELOPED BY R_HMT OFC
         </div>
+    </div>
 
-        <form id="ss-form">
-            <div class="form-group">
-                <label>URL TARGET</label>
-                <div class="input-wrapper">
-                    <i class="ri-links-line"></i>
-                    <input type="url" id="url" placeholder="https://domain-target.com" required>
-                </div>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="logo-box">
+                <i class="ri-camera-lens-line"></i>
             </div>
+            <h1>Web Capture</h1>
+        </div>
+    </nav>
 
-            <div class="form-group">
-                <label>PILIH PERANGKAT (RESOLUSI)</label>
-                <div class="select-row" id="select-preset-row" tabindex="0">
-                    <div class="select-content" id="selected-device-content">
-                        <i class="ri-computer-line" id="selected-icon"></i>
-                        <span id="selected-text">PILIH PRESET</span>
+    <main class="container">
+        <section id="generator" class="neo-card">
+            <div class="card-top">
+                <span class="badge">REC</span>
+                <span style="font-weight: 800; font-size: 14px;">LIVE CAPTURE SYSTEM</span>
+            </div>
+            
+            <form id="ss-form">
+                <div class="form-group">
+                    <label>TARGET URL</label>
+                    <div class="input-box">
+                        <i class="ri-links-line"></i>
+                        <input type="url" id="url" placeholder="https://domain-target.com" required>
                     </div>
-                    <i class="ri-arrow-down-s-line arrow-icon"></i>
                 </div>
+
+                <!-- DROPDOWN RESOLUSI (Satu Kolom) -->
+                <div class="form-group">
+                    <label>PILIH RESOLUSI</label>
+                    <div class="select-box">
+                        <select id="device-preset" style="padding-left: 15px;">
+                            <option value="phone">Mobile (375 x 812)</option>
+                            <option value="tablet">Tablet (768 x 1024)</option>
+                            <option value="laptop">Laptop (1366 x 768)</option>
+                            <option value="pcfhd" selected>PC FHD (1920 x 1080)</option>
+                            <option value="pc4k">PC 4K (3840 x 2160)</option>
+                            <option value="custom">Custom (Atur Manual)</option>
+                        </select>
+                        <i class="ri-arrow-down-s-fill"></i>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>VIEWPORT WIDTH</label>
+                        <div class="input-box">
+                            <input type="number" id="width" value="1920">
+                            <span class="unit">PX</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>VIEWPORT HEIGHT</label>
+                        <div class="input-box">
+                            <input type="number" id="height" value="1080">
+                            <span class="unit">PX</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>RENDER SCALE</label>
+                        <div class="select-box">
+                            <select id="scale" style="padding-left: 15px;">
+                                <option value="1">1x (Standard)</option>
+                                <option value="2">2x (Retina HD)</option>
+                                <option value="3">3x (Ultra 4K)</option>
+                            </select>
+                            <i class="ri-arrow-down-s-fill"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group toggle-group">
+                        <label>FULL PAGE MODE</label>
+                        <label class="neo-switch">
+                            <input type="checkbox" id="fullpage">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn-neo">
+                    <span id="btn-text">AMBIL SCREENSHOT</span>
+                    <i class="ri-flashlight-fill" id="btn-icon"></i>
+                    <div class="loader" id="loader"></div>
+                </button>
+            </form>
+
+            <div id="result-area">
+                <div class="divider"><span>HASIL CAPTURE</span></div>
+                
+                <div class="preview-window">
+                    <div class="window-bar">
+                        <div class="circles">
+                            <span class="c red"></span>
+                            <span class="c yellow"></span>
+                            <span class="c green"></span>
+                        </div>
+                        <div class="address-bar">capture_result.png</div>
+                    </div>
+                    <div class="img-container">
+                        <img id="result-img" src="" alt="Result">
+                    </div>
+                </div>
+
+                <button id="download-btn" class="btn-neo download-btn">
+                    <i class="ri-download-cloud-2-line"></i> DOWNLOAD GAMBAR
+                </button>
             </div>
+        </section>
 
-            <input type="hidden" id="width" value="1920">
-            <input type="hidden" id="height" value="1080">
-            <input type="hidden" id="device_scale" value="1">
-            <input type="hidden" id="custom_active" value="false">
-
-            <div class="form-group">
-                <label class="checkbox-wrapper">
-                    <input type="checkbox" id="fullpage">
-                    <span>Full Page Capture</span>
-                </label>
-            </div>
-
-            <button type="submit" id="submit-btn" class="btn">
-                <span id="btn-text">INITIALIZE CAPTURE</span>
-                <i class="ri-radar-line" id="btn-icon"></i>
-                <div class="loader" id="loader"></div>
-            </button>
-        </form>
-
-        <div id="result-area">
-            <div class="img-container">
-                <img id="result-img" src="" alt="Hasil Render">
-            </div>
-            <button id="download-btn" class="btn btn-success">
-                <i class="ri-download-cloud-3-line"></i> SIMPAN HASIL RENDER
-            </button>
-        </div>
-    </div>
-
-    <div class="preset-panel" id="preset-panel">
-        <header class="panel-header">
-            <h3>Pilih Preset Perangkat (HD)</h3>
-            <button class="close-panel-btn" id="close-panel-btn"><i class="ri-close-line"></i></button>
-        </header>
-        <ul class="preset-list">
-            <li class="preset-item" data-w="375" data-h="812" data-s="2" data-n="Mobile (iPhone X HD)"><i class="ri-smartphone-line"></i> Mobile (iPhone X HD)</li>
-            <li class="preset-item" data-w="768" data-h="1024" data-s="2" data-n="Tablet (iPad Air HD)"><i class="ri-tablet-line"></i> Tablet (iPad Air HD)</li>
-            <li class="preset-item" data-w="1366" data-h="768" data-s="1" data-n="Laptop (Standard)"><i class="ri-macbook-line"></i> Laptop (Standard)</li>
-            <li class="preset-item" data-w="1920" data-h="1080" data-s="1" data-n="PC Full HD (1080p)"><i class="ri-computer-line"></i> PC Full HD (1080p)</li>
-            <li class="preset-item" data-w="3840" data-h="2160" data-s="1" data-n="PC Ultra 4K HD"><i class="ri-tv-2-line"></i> PC Ultra 4K HD)</li>
-        </ul>
-    </div>
-
-    <footer>
-        <div class="powered-text">
-            POWERED BY <strong>R_hmt ofc</strong>
-        </div>
-
-        <div class="join-channel-box">
-            <a href="https://whatsapp.com/channel/0029VbBjyjlJ93wa6hwSWa0p" target="_blank" class="btn-join-saluran">
-                <i class="ri-whatsapp-fill"></i> JOIN SALURAN WHATSAPP
+        <footer class="main-footer">
+            <div class="powered-by">POWERED BY <span style="font-weight: 800;">R_hmt ofc</span></div>
+            
+            <a href="https://whatsapp.com/channel/0029VbBjyjlJ93wa6hwSWa0p" target="_blank" class="join-btn">
+                <i class="ri-whatsapp-fill" style="font-size: 20px;"></i> JOIN SALURAN WHATSAPP
             </a>
-        </div>
 
-        <div class="social-links">
-            <a href="https://www.instagram.com/rahmt_nhw?igsh=MWQwcnB3bTA2ZnVidg==" target="_blank"><i class="ri-instagram-line"></i></a>
-            <a href="https://www.tiktok.com/@r_hmtofc?_r=1&_t=ZS-94KRfWQjeUu" target="_blank"><i class="ri-tiktok-fill"></i></a>
-            <a href="https://t.me/rAi_engine" target="_blank"><i class="ri-telegram-fill"></i></a>
-        </div>
-    </footer>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/rahmt_nhw?igsh=MWQwcnB3bTA2ZnVidg==" target="_blank"><i class="ri-instagram-line"></i></a>
+                <a href="https://www.tiktok.com/@r_hmtofc?_r=1&_t=ZS-94KRfWQjeUu" target="_blank"><i class="ri-tiktok-fill"></i></a>
+                <a href="https://t.me/rAi_engine" target="_blank"><i class="ri-telegram-fill"></i></a>
+            </div>
+        </footer>
+    </main>
 
     <script>
-        // ================= LOGIKA UI: SLIDING PRESET PANEL =================
-        const selectPresetRow = document.getElementById('select-preset-row');
-        const presetPanel = document.getElementById('preset-panel');
-        const overlay = document.getElementById('overlay');
-        const closePanelBtn = document.getElementById('close-panel-btn');
-        const presetItems = document.querySelectorAll('.preset-item');
-        
-        // Hidden inputs
+        // ================= JAVASCRIPT SECTION =================
+        const API_URL = '/api/screenshot';
+
+        // --- Logika Dropdown Resolusi ---
+        const presetSelect = document.getElementById('device-preset');
         const wInput = document.getElementById('width');
         const hInput = document.getElementById('height');
-        const sInput = document.getElementById('device_scale');
-        
-        // UI Display
-        const selectedText = document.getElementById('selected-text');
-        const selectedIcon = document.getElementById('selected-icon');
 
-        // Buka panel
-        selectPresetRow.addEventListener('click', () => {
-            overlay.style.display = 'block';
-            setTimeout(() => presetPanel.classList.add('active'), 10);
-        });
-
-        // Tutup panel
-        const closePanel = () => {
-            presetPanel.classList.remove('active');
-            setTimeout(() => overlay.style.display = 'none', 300);
+        const deviceSizes = {
+            phone: { w: 375, h: 812 },
+            tablet: { w: 768, h: 1024 },
+            laptop: { w: 1366, h: 768 },
+            pcfhd: { w: 1920, h: 1080 },
+            pc4k: { w: 3840, h: 2160 }
         };
-        closePanelBtn.addEventListener('click', closePanel);
-        overlay.addEventListener('click', closePanel);
 
-        // Pilih Item
-        presetItems.forEach(item => {
-            item.addEventListener('click', () => {
-                // Ambil data
-                const w = item.dataset.w;
-                const h = item.dataset.h;
-                const s = item.dataset.s;
-                const n = item.dataset.n;
-                const iconClass = item.querySelector('i').className;
-
-                // Update input
-                wInput.value = w;
-                hInput.value = h;
-                sInput.value = s;
-
-                // Update UI Display
-                selectedText.textContent = n;
-                selectedIcon.className = iconClass;
-                selectedIcon.style.color = "var(--glow-main)"; // Neon
-
-                // Reset Selected Style di list
-                presetItems.forEach(pi => pi.classList.remove('selected'));
-                item.classList.add('selected');
-
-                closePanel();
-            });
+        presetSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (val !== 'custom' && deviceSizes[val]) {
+                wInput.value = deviceSizes[val].w;
+                hInput.value = deviceSizes[val].h;
+            }
         });
 
-        // Set default aktif (PC FHD)
-        presetItems[3].click();
+        // Auto pindah ke "Custom" kalau diketik manual
+        const setCustom = () => presetSelect.value = 'custom';
+        wInput.addEventListener('input', setCustom);
+        hInput.addEventListener('input', setCustom);
 
-
-        // ================= LOGIKA API CAPTURE (BAWAAN LU, JALAN) =================
-        const API_URL = '/api/screenshot';
+        // --- Logika Core Capture ---
         const form = document.getElementById('ss-form');
         const submitBtn = document.getElementById('submit-btn');
         const btnText = document.getElementById('btn-text');
@@ -614,7 +472,7 @@
             e.preventDefault();
             
             submitBtn.disabled = true;
-            btnText.textContent = 'INITIALIZING...';
+            btnText.textContent = 'MEMPROSES...';
             btnIcon.style.display = 'none';
             loader.style.display = 'block';
             resultArea.style.display = 'none';
@@ -623,12 +481,11 @@
                 url: document.getElementById('url').value,
                 width: parseInt(wInput.value) || 1280,
                 height: parseInt(hInput.value) || 720,
-                device_scale: parseInt(sInput.value) || 1,
+                device_scale: parseInt(document.getElementById('scale').value) || 1,
                 full_page: document.getElementById('fullpage').checked
             };
 
             try {
-                // Request ke Backend API asli lu (Axios di server)
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -642,50 +499,51 @@
                     resultArea.style.display = 'block';
                     resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 } else {
-                    alert('Error: ' + (data.message || 'Coba lagi bro.'));
+                    alert('Gagal mengambil screenshot. Cek URL lagi bro.');
                 }
 
             } catch (error) {
-                console.error('Fetch Error:', error);
-                alert('Kesalahan koneksi API.');
+                console.error('Error:', error);
+                alert('Terjadi kesalahan koneksi ke server.');
             } finally {
                 submitBtn.disabled = false;
-                btnText.textContent = 'INITIALIZE CAPTURE';
-                btnIcon.style.display = 'inline-block';
+                btnText.textContent = 'AMBIL SCREENSHOT';
+                btnIcon.style.display = 'block';
                 loader.style.display = 'none';
             }
         });
 
-        // ================= LOGIKA DOWNLOAD ASLI (TETAP AMAN) =================
+        // --- Logika Download (Tanpa Proxy - Aman) ---
         downloadBtn.addEventListener('click', async (e) => {
             e.preventDefault();
+            
             const imageUrl = resultImg.src;
-            if (!imageUrl) return;
+            if(!imageUrl) return;
 
             const originalHTML = downloadBtn.innerHTML;
-            downloadBtn.innerHTML = '<div class="loader" style="display:inline-block; border-color: var(--text-main); border-top-color: transparent;"></div>';
+            downloadBtn.innerHTML = `<div class="loader" style="display:inline-block; border-color: black; border-top-color: transparent;"></div> SEDANG MENDOWNLOAD...`;
             
             try {
-                // BALIK KE FUNGSI ASLI LU, JALAN TANPA PROXY JS
                 const response = await fetch(imageUrl);
                 const blob = await response.blob();
                 const tempUrl = window.URL.createObjectURL(blob);
                 
                 const a = document.createElement('a');
                 a.href = tempUrl;
-                a.download = `capture-${new Date().getTime()}.png`;
+                a.download = `Capture_R_hmt_${new Date().getTime()}.png`;
                 
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
+                
                 window.URL.revokeObjectURL(tempUrl);
             } catch (err) {
-                console.error("Gagal auto-download, fallback ke tab baru", err);
-                window.open(imageUrl, '_blank'); 
+                console.error("Gagal auto-download, membuka di tab baru", err);
+                window.open(imageUrl, '_blank');
             } finally {
                 downloadBtn.innerHTML = originalHTML;
             }
         });
     </script>
 </body>
-    </html> 
+    </html>
